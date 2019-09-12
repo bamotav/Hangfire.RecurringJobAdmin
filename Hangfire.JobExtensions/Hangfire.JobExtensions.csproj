@@ -6,15 +6,22 @@
       <Authors>Brayan Mota</Authors>
       <Copyright>Copyright © 2019-present Hangfire.Extension contributors</Copyright>
       <NeutralLanguage>en</NeutralLanguage>
+      <PackageProjectUrl>https://github.com/bamotav/Hangfire.JobExtensions</PackageProjectUrl>
+      <RepositoryUrl>https://github.com/bamotav/Hangfire.JobExtensions</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="HangFire.Core" Version="1.7.6" />
+    <None Remove="Dashboard\Content\jobextension.js" />
+    <None Remove="Dashboard\JobExtension.html" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Models\" />
-    <Folder Include="Core\" />
+    <EmbeddedResource Include="Dashboard\Content\jobextension.js" />
+    <EmbeddedResource Include="Dashboard\JobExtension.html" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="HangFire.Core" Version="1.7.6" />
   </ItemGroup>
 
 </Project>
