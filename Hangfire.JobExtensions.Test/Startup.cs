@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Hangfire.Common;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -54,6 +55,9 @@ namespace Hangfire.JobExtensions
             }
 
             app.UseHangfireDashboard();
+
+            var manager = new RecurringJobManager();
+            manager.AddOrUpdate("ReadTransactionJob", Job.FromExpression(() => Console.WriteLine("")), "*/5 * * * *");
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();

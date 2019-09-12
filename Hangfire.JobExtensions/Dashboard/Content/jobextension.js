@@ -8,8 +8,8 @@ function onPost() {
     $.ajax({
         async: true,
         cache: false,
-        timeout: 10000,
-        url: "/JobConfiguration/post",
+        //timeout: 10000,
+        url: "JobConfiguration/post",
         contentType: "application/x-www-form-urlencoded; charset=UTF-8",
         //data: data,
         type: "post",
