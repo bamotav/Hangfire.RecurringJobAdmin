@@ -58,6 +58,7 @@ namespace Hangfire.JobExtensions
 
             var manager = new RecurringJobManager();
             manager.AddOrUpdate("ReadTransactionJob", Job.FromExpression(() => Console.WriteLine("")), "*/5 * * * *");
+            manager.AddOrUpdate("ReadTransactionJob2", Job.FromExpression(() => Console.WriteLine("")), "*/8 * * * *");
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();

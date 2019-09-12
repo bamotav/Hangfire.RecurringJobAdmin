@@ -1,19 +1,71 @@
-﻿@*<div class="row">
-    <div class="col-md-6">
-        <h3>CPU</h3>
-        <canvas id="cpu-chart"></canvas>
-    </div>
-    <div class="col-md-6">
-        <h3>RAM</h3>
-        <canvas id="mem-chart"></canvas>
-    </div>
-</div>*@
-    <script defer type="text/javascript" src="JobConfiguration/js/page"></script>
-<div class="row">
-    <div class="col-md-12" style="margin-top: 30px">
-        <div class="table-responsive">
+﻿<script  type="text/javascript" src="https://cdn.jsdelivr.net/npm/vue"></script>
+<script  type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.min.js"></script>
+<script defer type="text/javascript" src="JobConfiguration/js/page"></script>
 
-            <button type="button" class="btn btn-info" onclick="onPost()">Dale</button>
+
+<div class="row">
+    <div id="app">
+
+        {{ jobs }}
+
+    </div>
+    <div class="col-md-12" style="margin-top: 30px">
+
+        <div class="bs-example" data-example-id="simple-table">
+            <table class="table">
+                <caption>Optional table caption.</caption>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Username</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th scope="row">1</th>
+                        <td>Mark</td>
+                        <td>Otto</td>
+                        <td>mdo</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">2</th>
+                        <td>Jacob</td>
+                        <td>Thornton</td>
+                        <td>fat</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">3</th>
+                        <td>Larry</td>
+                        <td>the Bird</td>
+                        <td>twitter</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
+
+
+        <button type="button" class="btn btn-info" onclick="onPost()">Dale</button>
+
     </div>
 </div>
+
+
+<script>
+    var app = new Vue({
+        el: '#app',
+        data() {
+            return {
+                info: null,
+                jobs: null,
+            }
+        },
+        mounted() {
+
+            axios
+                .get('JobConfiguration/post')
+                .then(res => (this.jobs = res))
+        }
+    });
+</script>

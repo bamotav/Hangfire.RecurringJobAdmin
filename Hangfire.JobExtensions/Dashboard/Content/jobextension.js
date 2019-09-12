@@ -12,7 +12,7 @@ function onPost() {
         url: "JobConfiguration/post",
         contentType: "application/x-www-form-urlencoded; charset=UTF-8",
         //data: data,
-        type: "post",
+        type: "get",
         success: function (r) {
             debugger;
             //var jobLink = jobLinkBaseUrl + r;

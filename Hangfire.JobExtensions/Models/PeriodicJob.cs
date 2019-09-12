@@ -5,37 +5,25 @@ using System.Text;
 
 namespace Hangfire.JobExtensions.Models
 {
+
     /// <summary>
-	/// It is used to build <see cref="RecurringJob"/> 
-	///// with <see cref="IRecurringJobBuilder.Build(Func{System.Collections.Generic.IEnumerable{RecurringJobInfo}})"/>.
-	/// </summary>
+    /// It is used to build <see cref="RecurringJob"/> 
+    ///// with <see cref="IRecurringJobBuilder.Build(Func{System.Collections.Generic.IEnumerable{RecurringJobInfo}})"/>.
+    /// </summary>
     public class PeriodicJob
     {
-        /// <summary>
-		/// The identifier of the RecurringJob
-		/// </summary>
-		public string RecurringJobId { get; set; }
-        /// <summary>
-        /// Cron expressions
-        /// </summary>
+        public string Id { get; set; }
         public string Cron { get; set; }
-        /// <summary>
-        /// TimeZoneInfo
-        /// </summary>
-        public TimeZoneInfo TimeZone { get; set; }
-        /// <summary>
-        /// Queue name
-        /// </summary>
         public string Queue { get; set; }
-        /// <summary>
-        /// Method to execute while <see cref="RecurringJob"/> running.
-        /// </summary>
-        public MethodInfo Method { get; set; }
 
-        /// <summary>
-        /// Whether the <see cref="RecurringJob"/> can be added/updated,
-        /// default value is true, if false it will be deleted automatically.
-        /// </summary>
-        public bool Enable { get; set; }
+        public DateTime? NextExecution { get; set; }
+        public string LastJobId { get; set; }
+        public string LastJobState { get; set; }
+        public DateTime? LastExecution { get; set; }
+        public DateTime? CreatedAt { get; set; }
+        public bool Removed { get; set; }
+        public string TimeZoneId { get; set; }
+        public string Error { get; set; }
     }
+
 }

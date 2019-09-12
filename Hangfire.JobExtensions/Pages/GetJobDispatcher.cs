@@ -2,7 +2,9 @@
 using Hangfire.Common;
 using Hangfire.Dashboard;
 using Hangfire.JobExtensions.Core;
+using Hangfire.JobExtensions.Models;
 using Hangfire.Storage;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
@@ -21,27 +23,38 @@ namespace Hangfire.JobExtensions.Pages
         }
         public async Task Dispatch([NotNull] DashboardContext context)
         {
-            var recurringJobIds = _connection.GetRecurringJobs();//_connection.GetAllItemsFromSet("recurring-jobs");
+            var recurringJob = _connection.GetRecurringJobs();
+            var periodicJob = new List<PeriodicJob>();
 
-          
-            if (!"POST".Equals(context.Request.Method, StringComparison.InvariantCultureIgnoreCase))
+            recurringJob.ForEach((x) =>
+            {
+
+                periodicJob.Add(new PeriodicJob
+                {
+                    Id = x.Id,
+                    Cron = x.Cron,
+                    CreatedAt = x.CreatedAt,
+                    Error = x.Error,
+                    LastExecution = x.LastExecution,
+                    Queue = x.Queue,
+                    LastJobId = x.LastJobId,
+                    LastJobState = x.LastJobState,
+                    NextExecution = x.NextExecution,
+                    Removed = x.Removed,
+                    TimeZoneId = x.TimeZoneId
+                });
+            });
+
+
+
+            if (!"GET".Equals(context.Request.Method, StringComparison.InvariantCultureIgnoreCase))
             {
                 context.Response.StatusCode = 405;
+
                 return;
             }
 
-            try
-            {
-                var testJob = context.GetBackgroundJobClient();
-                var testJob1 = context.GetRecurringJobManager();
-
-            }
-            catch (Exception ex)
-            {
-
-                throw;
-            }
-
+            await context.Response.WriteAsync(JsonConvert.SerializeObject(periodicJob));
         }
     }
 }

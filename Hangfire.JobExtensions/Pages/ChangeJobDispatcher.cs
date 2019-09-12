@@ -1,5 +1,6 @@
 ﻿using Hangfire.Annotations;
 using Hangfire.Dashboard;
+using Hangfire.JobExtensions.Core;
 using Hangfire.Storage;
 using System;
 using System.Collections.Generic;
