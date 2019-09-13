@@ -88,6 +88,9 @@
                     </div>
 
                     <div class="modal-footer">
+                        <button class="modal-default-button btn btn-danger pull-left" @click="$emit('close')">
+                            close
+                        </button>
                         <slot name="footer">
                             <!-- @click="$emit('close')"-->
                             <button class="modal-default-button btn btn-success" @click="$emit('close')">
@@ -210,21 +213,27 @@
         },
         methods: {
             addJob() {
-                debugger;
-
+                
+                var $this = this;
                 $.ajax({
                     async: true,
                     cache: false,
-                    //timeout: 10000,
                     url: "JobConfiguration/UpdateJobs",
-                   // contentType: "application/x-www-form-urlencoded; charset=UTF-8",
                     data: this.job,
                     type: "post",
                     success: function (r) {
                         debugger;
+                        axios.get('JobConfiguration/GetJobs')
+                            .then(res => ($this.jobs = res.data));
+
+                       $this.showModal = false;
+                       $this.$emit('close');
                     },
                     error: function (r) {
-                      debugger;
+
+                        alert('Error');
+                       $this.showModal = false;
+                       $this.$emit('close');
                     }
                 });
 
