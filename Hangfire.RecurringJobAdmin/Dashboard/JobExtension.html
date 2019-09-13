@@ -2,13 +2,150 @@
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.min.js"></script>
 <script defer type="text/javascript" src="JobConfiguration/js/page"></script>
 
+
+<style>
+    .modal-mask {
+  position: fixed;
+  z-index: 9998;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, .5);
+  display: table;
+  transition: opacity .3s ease;
+}
+
+.modal-wrapper {
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.modal-container {
+  width: 500px;
+  margin: 0px auto;
+  padding: 20px 30px;
+  background-color: #fff;
+  border-radius: 2px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, .33);
+  transition: all .3s ease;
+  font-family: Helvetica, Arial, sans-serif;
+}
+
+.modal-header h3 {
+  margin-top: 0;
+  color: #42b983;
+}
+
+.modal-body {
+  margin: 20px 0;
+}
+
+.modal-default-button {
+  float: right;
+}
+
+/*
+ * The following styles are auto-applied to elements with
+ * transition="modal" when their visibility is toggled
+ * by Vue.js.
+ *
+ * You can easily play with the modal transition by editing
+ * these styles.
+ */
+
+.modal-enter {
+  opacity: 0;
+}
+
+.modal-leave-active {
+  opacity: 0;
+}
+
+.modal-enter .modal-container,
+.modal-leave-active .modal-container {
+  -webkit-transform: scale(1.1);
+  transform: scale(1.1);
+}
+</style>
+
+<script type="text/x-template" id="modal-template">
+    <transition name="modal">
+        <div class="modal-mask">
+            <div class="modal-wrapper">
+                <div class="modal-container">
+
+                    <div class="modal-header">
+                        <slot name="header">
+                            default header
+                        </slot>
+                    </div>
+
+                    <div class="modal-body">
+                        <slot name="body">
+                            default body
+                        </slot>
+                    </div>
+
+                    <div class="modal-footer">
+                        <slot name="footer">
+                            
+                            <button class="modal-default-button btn btn-success" @click="$emit('close')">
+                                OK
+                            </button>
+                        </slot>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </transition>
+</script>
+
+
 <div id="app">
+
+    <modal v-if="showModal" @close="showModal = false">
+        <!--
+      you can use custom content here to overwrite
+      default content
+    -->
+        <form slot="body">
+            <div class="form-group">
+                <label for="jobId">Job Id</label>
+                <input type="text" class="form-control" id="jobId" aria-describedby="emailHelp" placeholder="Enter Job Id">
+                <!--<small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>-->
+            </div>
+            <div class="form-group">
+                <label for="cron">Cron</label>
+                <input type="text" class="form-control" id="cron" placeholder="Enter Cron (Unix time)">
+            </div>
+
+            <div class="form-group">
+                <label for="class">Class</label>
+                <input type="text" class="form-control" aria-describedby="class" id="class" placeholder="Enter Class Name">
+                <small id="class" class="form-text text-muted">Please provider path complete about your class example: Hangfire.RecurringJob.MyClass</small>
+            </div>
+
+            <div class="form-group">
+                <label for="method">Method</label>
+                <input type="text" class="form-control" id="method" placeholder="Enter Method Name">
+            </div>
+
+            <div class="form-group">
+                <label for="queue">Queue</label>
+                <input type="text" class="form-control" id="queue" placeholder="Enter Queue Name">
+            </div>
+           
+
+        </form>
+
+        <h3 slot="header">Add New Job</h3>
+    </modal>
     <div class="row">
 
         <div class="col-md-12" style="margin-top: 30px">
             <h1 class="page-header">Recurring Jobs <span class="badge badge-warning">{{jobs.length}}</span></h1>
-            <button type="button" class="btn btn-primary" style="margin-bottom: 20px;" onclick="onPost()">Add new Job</button>
-            <br/>
+            <button type="button" class="btn btn-primary" style="margin-bottom: 20px;" @click="showModal = true">Add new Job</button>
             <div class="table-responsive">
                 <table class="table">
 
@@ -46,11 +183,16 @@
 </div>
 
 <script>
+    Vue.component('modal', {
+        template: '#modal-template'
+    });
+
     var appJob = new Vue({
         el: '#app',
         data() {
             return {
                 jobs: null,
+                showModal: false
             }
         },
         mounted() {
