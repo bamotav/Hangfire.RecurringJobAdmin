@@ -222,7 +222,7 @@
                     data: this.job,
                     type: "post",
                     success: function (r) {
-                        debugger;
+                        
                         axios.get('JobConfiguration/GetJobs')
                             .then(res => ($this.jobs = res.data));
 
@@ -236,14 +236,6 @@
                        $this.$emit('close');
                     }
                 });
-
-                //axios.get('JobConfiguration/UpdateJobs', this.job)
-                //.then(function (response) {
-                //    debugger;
-                //})
-                //.catch(function (error) {
-                //    debugger;
-                //});
             }
         },
         mounted() {
