@@ -37,7 +37,7 @@ namespace Hangfire.JobExtensions
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services.AddHangfire(config => config.UseSqlServerStorage(Configuration.GetConnectionString("HangfireConnection"))
-                                                 .UseJobExtension());
+                                                 .UseRecurringJobAdmin());
             services.AddHangfireServer();
         }
 

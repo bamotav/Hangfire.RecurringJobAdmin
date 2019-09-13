@@ -2,13 +2,39 @@
 using Hangfire.Dashboard;
 using Hangfire.RecurringJobAdmin.Pages;
 using System;
+using System.Reflection;
 
 namespace Hangfire.RecurringJobAdmin
 {
     public static class ConfigurationExtensions
     {
+
         [PublicAPI]
-        public static IGlobalConfiguration UseJobExtension(this IGlobalConfiguration config)
+        public static IGlobalConfiguration UseRecurringJobAdmin(this IGlobalConfiguration config, string assembly)
+        {
+            PeriodicJobBuilder.GetAllJobs(Type.GetType(assembly).Assembly);
+            CreateManagmentJob();
+            return config;
+        }
+
+
+        [PublicAPI]
+        public static IGlobalConfiguration UseRecurringJobAdmin(this IGlobalConfiguration config, Assembly assembly)
+        {
+            PeriodicJobBuilder.GetAllJobs(assembly);
+            CreateManagmentJob();
+            return config;
+        }
+
+
+        [PublicAPI]
+        public static IGlobalConfiguration UseRecurringJobAdmin(this IGlobalConfiguration config)
+        {
+            CreateManagmentJob();
+            return config;
+        }
+
+        private static void CreateManagmentJob()
         {
             DashboardRoutes.Routes.AddRazorPage(JobExtensionPage.PageRoute, x => new JobExtensionPage());
             DashboardRoutes.Routes.Add("/JobConfiguration/GetJobs", new GetJobDispatcher());
@@ -23,11 +49,11 @@ namespace Hangfire.RecurringJobAdmin
              "/JobConfiguration/js/page",
              "application/js",
              "Hangfire.RecurringJobAdmin.Dashboard.Content.jobextension.js");
-
-            return config;
         }
 
         private static void AddDashboardRouteToEmbeddedResource(string route, string contentType, string resourceName)
            => DashboardRoutes.Routes.Add(route, new ContentDispatcher(contentType, resourceName, TimeSpan.FromDays(1)));
     }
+
+    
 }
