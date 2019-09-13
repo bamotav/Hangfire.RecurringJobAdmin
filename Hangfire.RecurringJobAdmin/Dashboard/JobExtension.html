@@ -1,72 +1,75 @@
 ﻿<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vue"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.min.js"></script>
+<!--<script type="text/javascript" src="JobConfiguration/js/vue"></script>
+<script  type="text/javascript" src="JobConfiguration/js/axio"></script>-->
 <script defer type="text/javascript" src="JobConfiguration/js/page"></script>
 
 
+
 <style>
-    .modal-mask {
-  position: fixed;
-  z-index: 9998;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, .5);
-  display: table;
-  transition: opacity .3s ease;
-}
+       .modal-mask {
+           position: fixed;
+           z-index: 9998;
+           top: 0;
+           left: 0;
+           width: 100%;
+           height: 100%;
+           background-color: rgba(0, 0, 0, .5);
+           display: table;
+           transition: opacity .3s ease;
+       }
 
-.modal-wrapper {
-  display: table-cell;
-  vertical-align: middle;
-}
+       .modal-wrapper {
+           display: table-cell;
+           vertical-align: middle;
+       }
 
-.modal-container {
-  width: 500px;
-  margin: 0px auto;
-  padding: 20px 30px;
-  background-color: #fff;
-  border-radius: 2px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, .33);
-  transition: all .3s ease;
-  font-family: Helvetica, Arial, sans-serif;
-}
+       .modal-container {
+           width: 500px;
+           margin: 0px auto;
+           padding: 20px 30px;
+           background-color: #fff;
+           border-radius: 2px;
+           box-shadow: 0 2px 8px rgba(0, 0, 0, .33);
+           transition: all .3s ease;
+           font-family: Helvetica, Arial, sans-serif;
+       }
 
-.modal-header h3 {
-  margin-top: 0;
-  color: #42b983;
-}
+       .modal-header h3 {
+           margin-top: 0;
+           color: #42b983;
+       }
 
-.modal-body {
-  margin: 20px 0;
-}
+       .modal-body {
+           margin: 20px 0;
+       }
 
-.modal-default-button {
-  float: right;
-}
+       .modal-default-button {
+           float: right;
+       }
 
-/*
- * The following styles are auto-applied to elements with
- * transition="modal" when their visibility is toggled
- * by Vue.js.
- *
- * You can easily play with the modal transition by editing
- * these styles.
- */
+       /*
+    * The following styles are auto-applied to elements with
+    * transition="modal" when their visibility is toggled
+    * by Vue.js.
+    *
+    * You can easily play with the modal transition by editing
+    * these styles.
+    */
 
-.modal-enter {
-  opacity: 0;
-}
+       .modal-enter {
+           opacity: 0;
+       }
 
-.modal-leave-active {
-  opacity: 0;
-}
+       .modal-leave-active {
+           opacity: 0;
+       }
 
-.modal-enter .modal-container,
-.modal-leave-active .modal-container {
-  -webkit-transform: scale(1.1);
-  transform: scale(1.1);
-}
+           .modal-enter .modal-container,
+           .modal-leave-active .modal-container {
+               -webkit-transform: scale(1.1);
+               transform: scale(1.1);
+           }
 </style>
 
 <script type="text/x-template" id="modal-template">
@@ -109,13 +112,13 @@
 
     <modal v-if="showModal" @close="showModal = false">
         <!--
-      you can use custom content here to overwrite
-      default content
-    -->
+          you can use custom content here to overwrite
+          default content
+        -->
         <form slot="body">
             <div class="form-group">
                 <label for="jobId">Job Id</label>
-                <input type="text" class="form-control"  v-model="job.Id" id="jobId" aria-describedby="emailHelp" placeholder="Enter Job Id">
+                <input type="text" class="form-control" v-model="job.Id" id="jobId" aria-describedby="emailHelp" placeholder="Enter Job Id">
                 <!--<small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>-->
             </div>
             <div class="form-group">
@@ -138,7 +141,7 @@
                 <label for="queue">Queue</label>
                 <input type="text" class="form-control" v-model="job.Queue" id="queue" placeholder="Enter Queue Name">
             </div>
-           
+
 
         </form>
 
@@ -213,7 +216,7 @@
         },
         methods: {
             addJob() {
-                
+
                 var $this = this;
                 $.ajax({
                     async: true,
@@ -222,18 +225,18 @@
                     data: this.job,
                     type: "post",
                     success: function (r) {
-                        
+
                         axios.get('JobConfiguration/GetJobs')
                             .then(res => ($this.jobs = res.data));
 
-                       $this.showModal = false;
-                       $this.$emit('close');
+                        $this.showModal = false;
+                        $this.$emit('close');
                     },
                     error: function (r) {
 
                         alert('Error');
-                       $this.showModal = false;
-                       $this.$emit('close');
+                        $this.showModal = false;
+                        $this.$emit('close');
                     }
                 });
             }

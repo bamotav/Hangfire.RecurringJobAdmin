@@ -8,15 +8,21 @@
       <NeutralLanguage>en</NeutralLanguage>
       <PackageProjectUrl>https://github.com/bamotav/Hangfire.RecurringJobAdmin.git</PackageProjectUrl>
       <RepositoryUrl>https://github.com/bamotav/Hangfire.RecurringJobAdmin.git</RepositoryUrl>
+      <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+      <Version>1.0.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Dashboard\Content\axios.min.js" />
     <None Remove="Dashboard\Content\jobextension.js" />
+    <None Remove="Dashboard\Content\vue.js" />
     <None Remove="Dashboard\JobExtension.html" />
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Dashboard\Content\axios.min.js" />
     <EmbeddedResource Include="Dashboard\Content\jobextension.js" />
+    <EmbeddedResource Include="Dashboard\Content\vue.js" />
     <EmbeddedResource Include="Dashboard\JobExtension.html" />
   </ItemGroup>
 

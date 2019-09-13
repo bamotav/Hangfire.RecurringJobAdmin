@@ -45,10 +45,10 @@ namespace Hangfire.RecurringJobAdmin
                 Active = page.RequestPath.StartsWith(JobExtensionPage.PageRoute)
             });
 
-            AddDashboardRouteToEmbeddedResource(
-             "/JobConfiguration/js/page",
-             "application/js",
-             "Hangfire.RecurringJobAdmin.Dashboard.Content.jobextension.js");
+           AddDashboardRouteToEmbeddedResource("/JobConfiguration/js/page", "application/js", "Hangfire.RecurringJobAdmin.Dashboard.Content.jobextension.js");
+           AddDashboardRouteToEmbeddedResource("/JobConfiguration/js/vue", "application/js", "Hangfire.RecurringJobAdmin.Dashboard.Content.vue.js");
+           AddDashboardRouteToEmbeddedResource("/JobConfiguration/js/axio", "application/js", "Hangfire.RecurringJobAdmin.Dashboard.Content.axios.min.js");
+
         }
 
         private static void AddDashboardRouteToEmbeddedResource(string route, string contentType, string resourceName)
