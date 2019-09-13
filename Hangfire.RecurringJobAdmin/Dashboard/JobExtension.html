@@ -1,63 +1,55 @@
-﻿<script  type="text/javascript" src="https://cdn.jsdelivr.net/npm/vue"></script>
-<script  type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.min.js"></script>
+﻿<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vue"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.min.js"></script>
 <script defer type="text/javascript" src="JobConfiguration/js/page"></script>
 
+<div id="app">
+    <div class="row">
 
-<div class="row">
-    <div id="app">
+        <div class="col-md-12" style="margin-top: 30px">
+            <h1 class="page-header">Recurring Jobs <span class="badge badge-warning">{{jobs.length}}</span></h1>
+            <button type="button" class="btn btn-primary" style="margin-bottom: 20px;" onclick="onPost()">Add new Job</button>
+            <br/>
+            <div class="table-responsive">
+                <table class="table">
 
-        {{ jobs }}
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Cron</th>
+                            <th>Queue</th>
+                            <th>Method</th>
+                            <th>Last Execution</th>
+                            <th>Next Execution</th>
+                            <th>Options</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="job in jobs">
+                            <td>{{job.Id}}</td>
+                            <td>{{job.Cron}}</td>
+                            <td>{{job.Queue}}</td>
+                            <td></td>
+                            <td>{{job.LastExecution}}</td>
+                            <td>{{job.NextExecution}}</td>
+                            <td> <button type="button" class="btn btn-warning" onclick="onPost()">Edit</button></td>
+                        </tr>
 
-    </div>
-    <div class="col-md-12" style="margin-top: 30px">
+                    </tbody>
+                </table>
+            </div>
 
-        <div class="bs-example" data-example-id="simple-table">
-            <table class="table">
-                <caption>Optional table caption.</caption>
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>First Name</th>
-                        <th>Last Name</th>
-                        <th>Username</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <th scope="row">1</th>
-                        <td>Mark</td>
-                        <td>Otto</td>
-                        <td>mdo</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">2</th>
-                        <td>Jacob</td>
-                        <td>Thornton</td>
-                        <td>fat</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">3</th>
-                        <td>Larry</td>
-                        <td>the Bird</td>
-                        <td>twitter</td>
-                    </tr>
-                </tbody>
-            </table>
+
+
+
         </div>
-
-
-        <button type="button" class="btn btn-info" onclick="onPost()">Dale</button>
-
     </div>
 </div>
 
-
 <script>
-    var app = new Vue({
+    var appJob = new Vue({
         el: '#app',
         data() {
             return {
-                info: null,
                 jobs: null,
             }
         },
@@ -65,7 +57,7 @@
 
             axios
                 .get('JobConfiguration/post')
-                .then(res => (this.jobs = res))
+                .then(res => (this.jobs = res.data))
         }
     });
 </script>
