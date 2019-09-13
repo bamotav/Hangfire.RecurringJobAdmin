@@ -16,6 +16,10 @@ namespace Hangfire.RecurringJobAdmin.Models
         public string Cron { get; set; }
         public string Queue { get; set; }
 
+        public string Class { get; set; }
+
+        public string Method { get; set; }
+
         public DateTime? NextExecution { get; set; }
         public string LastJobId { get; set; }
         public string LastJobState { get; set; }

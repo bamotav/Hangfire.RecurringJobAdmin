@@ -11,7 +11,8 @@ namespace Hangfire.RecurringJobAdmin
         public static IGlobalConfiguration UseJobExtension(this IGlobalConfiguration config)
         {
             DashboardRoutes.Routes.AddRazorPage(JobExtensionPage.PageRoute, x => new JobExtensionPage());
-            DashboardRoutes.Routes.Add("/JobConfiguration/post", new GetJobDispatcher());
+            DashboardRoutes.Routes.Add("/JobConfiguration/GetJobs", new GetJobDispatcher());
+            DashboardRoutes.Routes.Add("/JobConfiguration/UpdateJobs", new ChangeJobDispatcher());
 
             NavigationMenu.Items.Add(page => new MenuItem(JobExtensionPage.Title, "JobConfiguration")
             {

@@ -89,7 +89,7 @@
 
                     <div class="modal-footer">
                         <slot name="footer">
-                            
+                            <!-- @click="$emit('close')"-->
                             <button class="modal-default-button btn btn-success" @click="$emit('close')">
                                 OK
                             </button>
@@ -112,32 +112,38 @@
         <form slot="body">
             <div class="form-group">
                 <label for="jobId">Job Id</label>
-                <input type="text" class="form-control" id="jobId" aria-describedby="emailHelp" placeholder="Enter Job Id">
+                <input type="text" class="form-control"  v-model="job.Id" id="jobId" aria-describedby="emailHelp" placeholder="Enter Job Id">
                 <!--<small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>-->
             </div>
             <div class="form-group">
                 <label for="cron">Cron</label>
-                <input type="text" class="form-control" id="cron" placeholder="Enter Cron (Unix time)">
+                <input type="text" class="form-control" id="cron" v-model="job.Cron" placeholder="Enter Cron (Unix time)">
             </div>
 
             <div class="form-group">
                 <label for="class">Class</label>
-                <input type="text" class="form-control" aria-describedby="class" id="class" placeholder="Enter Class Name">
+                <input type="text" class="form-control" v-model="job.Class" aria-describedby="class" id="class" placeholder="Enter Class Name">
                 <small id="class" class="form-text text-muted">Please provider path complete about your class example: Hangfire.RecurringJob.MyClass</small>
             </div>
 
             <div class="form-group">
                 <label for="method">Method</label>
-                <input type="text" class="form-control" id="method" placeholder="Enter Method Name">
+                <input type="text" class="form-control" v-model="job.Method" id="method" placeholder="Enter Method Name">
             </div>
 
             <div class="form-group">
                 <label for="queue">Queue</label>
-                <input type="text" class="form-control" id="queue" placeholder="Enter Queue Name">
+                <input type="text" class="form-control" v-model="job.Queue" id="queue" placeholder="Enter Queue Name">
             </div>
            
 
         </form>
+
+        <div slot="footer">
+            <button class="btn btn-success" @click="addJob">
+                OK
+            </button>
+        </div>
 
         <h3 slot="header">Add New Job</h3>
     </modal>
@@ -192,13 +198,49 @@
         data() {
             return {
                 jobs: null,
-                showModal: false
+                showModal: false,
+                job: {
+                    Id: '',
+                    Cron: '',
+                    Queue: '',
+                    Class: '',
+                    Method: '',
+                }
+            }
+        },
+        methods: {
+            addJob() {
+                debugger;
+
+                $.ajax({
+                    async: true,
+                    cache: false,
+                    //timeout: 10000,
+                    url: "JobConfiguration/UpdateJobs",
+                   // contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+                    data: this.job,
+                    type: "post",
+                    success: function (r) {
+                        debugger;
+                    },
+                    error: function (r) {
+                      debugger;
+                    }
+                });
+
+                //axios.get('JobConfiguration/UpdateJobs', this.job)
+                //.then(function (response) {
+                //    debugger;
+                //})
+                //.catch(function (error) {
+                //    debugger;
+                //});
             }
         },
         mounted() {
 
             axios
-                .get('JobConfiguration/post')
+                .get('JobConfiguration/GetJobs')
                 .then(res => (this.jobs = res.data))
         }
     });
