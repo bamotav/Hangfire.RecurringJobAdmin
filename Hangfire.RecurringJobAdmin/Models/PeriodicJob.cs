@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 
-namespace Hangfire.JobExtensions.Models
+namespace Hangfire.RecurringJobAdmin.Models
 {
 
     /// <summary>

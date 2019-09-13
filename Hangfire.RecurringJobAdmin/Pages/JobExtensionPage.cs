@@ -1,11 +1,11 @@
 ﻿using Hangfire.Dashboard;
 using Hangfire.Dashboard.Pages;
-using Hangfire.JobExtensions.Core;
+using Hangfire.RecurringJobAdmin.Core;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Hangfire.JobExtensions.Pages
+namespace Hangfire.RecurringJobAdmin.Pages
 {
     internal sealed class JobExtensionPage : RazorPage
     {
@@ -16,7 +16,7 @@ namespace Hangfire.JobExtensions.Pages
 
         static JobExtensionPage()
         {
-            PageHtml = Utility.ReadStringResource("Hangfire.JobExtensions.Dashboard.JobExtension.html");
+            PageHtml = Utility.ReadStringResource("Hangfire.RecurringJobAdmin.Dashboard.JobExtension.html");
         }
 
         public override void Execute()

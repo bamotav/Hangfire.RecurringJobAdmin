@@ -1,6 +1,6 @@
 ﻿using Hangfire.Annotations;
 using Hangfire.Dashboard;
-using Hangfire.JobExtensions.Core;
+using Hangfire.RecurringJobAdmin.Core;
 using Hangfire.Storage;
 using System;
 using System.Collections.Generic;
@@ -8,7 +8,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Hangfire.JobExtensions.Pages
+namespace Hangfire.RecurringJobAdmin.Pages
 {
     internal sealed class ChangeJobDispatcher : IDashboardDispatcher
     {

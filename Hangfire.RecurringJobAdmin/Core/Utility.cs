@@ -4,7 +4,7 @@ using System.IO;
 using System.Resources;
 using System.Text;
 
-namespace Hangfire.JobExtensions.Core
+namespace Hangfire.RecurringJobAdmin.Core
 {
 
 

@@ -1,8 +1,8 @@
 ﻿using Hangfire.Annotations;
 using Hangfire.Common;
 using Hangfire.Dashboard;
-using Hangfire.JobExtensions.Core;
-using Hangfire.JobExtensions.Models;
+using Hangfire.RecurringJobAdmin.Core;
+using Hangfire.RecurringJobAdmin.Models;
 using Hangfire.Storage;
 using Newtonsoft.Json;
 using System;
@@ -11,7 +11,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Hangfire.JobExtensions.Pages
+namespace Hangfire.RecurringJobAdmin.Pages
 {
     internal sealed class GetJobDispatcher : IDashboardDispatcher
     {

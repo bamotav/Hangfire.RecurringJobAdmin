@@ -5,7 +5,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Hangfire.JobExtensions.Pages
+namespace Hangfire.RecurringJobAdmin.Pages
 {
     internal class ContentDispatcher : IDashboardDispatcher
     {

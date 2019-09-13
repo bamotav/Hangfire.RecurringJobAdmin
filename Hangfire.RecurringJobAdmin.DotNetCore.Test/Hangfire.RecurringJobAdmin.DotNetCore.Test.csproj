@@ -18,7 +18,7 @@
 
 
   <ItemGroup>
-    <ProjectReference Include="..\Hangfire.JobExtensions\Hangfire.JobExtensions.csproj" />
+    <ProjectReference Include="..\Hangfire.RecurringJobAdmin\Hangfire.RecurringJobAdmin.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,9 +1,9 @@
 ﻿using Hangfire.Annotations;
 using Hangfire.Dashboard;
-using Hangfire.JobExtensions.Pages;
+using Hangfire.RecurringJobAdmin.Pages;
 using System;
 
-namespace Hangfire.JobExtensions
+namespace Hangfire.RecurringJobAdmin
 {
     public static class ConfigurationExtensions
     {
@@ -21,7 +21,7 @@ namespace Hangfire.JobExtensions
             AddDashboardRouteToEmbeddedResource(
              "/JobConfiguration/js/page",
              "application/js",
-             "Hangfire.JobExtensions.Dashboard.Content.jobextension.js");
+             "Hangfire.RecurringJobAdmin.Dashboard.Content.jobextension.js");
 
             return config;
         }

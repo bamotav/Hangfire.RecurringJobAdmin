@@ -6,8 +6,8 @@
       <Authors>Brayan Mota</Authors>
       <Copyright>Copyright © 2019-present Hangfire.Extension contributors</Copyright>
       <NeutralLanguage>en</NeutralLanguage>
-      <PackageProjectUrl>https://github.com/bamotav/Hangfire.JobExtensions</PackageProjectUrl>
-      <RepositoryUrl>https://github.com/bamotav/Hangfire.JobExtensions</RepositoryUrl>
+      <PackageProjectUrl>https://github.com/bamotav/Hangfire.RecurringJobAdmin.git</PackageProjectUrl>
+      <RepositoryUrl>https://github.com/bamotav/Hangfire.RecurringJobAdmin.git</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>
