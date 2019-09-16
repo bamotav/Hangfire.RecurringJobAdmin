@@ -17,6 +17,7 @@
     <None Remove="Dashboard\Content\js\axios.min.js" />
     <None Remove="Dashboard\Content\js\jobextension.js" />
     <None Remove="Dashboard\Content\js\vue.js" />
+    <None Remove="Dashboard\JobExtension.html" />
   </ItemGroup>
 
   <ItemGroup>
@@ -32,6 +33,7 @@
     <EmbeddedResource Include="Dashboard\Content\js\vue.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
+    <EmbeddedResource Include="Dashboard\JobExtension.html" />
   </ItemGroup>
 
   <!--<ItemGroup>
