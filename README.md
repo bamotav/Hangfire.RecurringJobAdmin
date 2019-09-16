@@ -2,7 +2,7 @@
 
 ![dashboard](Content/dashboard.png)
 
-A simple dashboard that shows the Recurring Job to manage it.
+A simple dashboard to manage Hangfire's recurring jobs.
 
 This repo is the extension for [Hangfire](https://github.com/HangfireIO/Hangfire)
 
