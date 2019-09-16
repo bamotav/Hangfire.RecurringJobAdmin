@@ -3,7 +3,7 @@
   <PropertyGroup>
       <TargetFrameworks>netstandard2.0;net462</TargetFrameworks>
       <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-      <Authors>Brayan Mota</Authors>
+      <Authors>Brayan Mota, Braulio Alvarez</Authors>
       <Copyright>Copyright © 2019-present Hangfire.Extension contributors</Copyright>
       <NeutralLanguage>en</NeutralLanguage>
       <PackageProjectUrl>https://github.com/bamotav/Hangfire.RecurringJobAdmin.git</PackageProjectUrl>
@@ -13,18 +13,38 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Dashboard\Content\axios.min.js" />
-    <None Remove="Dashboard\Content\jobextension.js" />
-    <None Remove="Dashboard\Content\vue.js" />
+    <None Remove="Dashboard\Content\css\JobExtension.css" />
+    <None Remove="Dashboard\Content\js\axios.min.js" />
+    <None Remove="Dashboard\Content\js\jobextension.js" />
+    <None Remove="Dashboard\Content\js\vue.js" />
     <None Remove="Dashboard\JobExtension.html" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Dashboard\Content\axios.min.js" />
-    <EmbeddedResource Include="Dashboard\Content\jobextension.js" />
-    <EmbeddedResource Include="Dashboard\Content\vue.js" />
+    <EmbeddedResource Include="Dashboard\Content\css\JobExtension.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dashboard\Content\js\axios.min.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dashboard\Content\js\jobextension.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dashboard\Content\js\vue.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
     <EmbeddedResource Include="Dashboard\JobExtension.html" />
   </ItemGroup>
+
+  <!--<ItemGroup>
+    <Compile Remove="Dashboard\Content\css\**" />
+    <Compile Remove="Dashboard\Content\js\**" />
+    <EmbeddedResource Remove="Dashboard\Content\css\**" />
+    <EmbeddedResource Remove="Dashboard\Content\js\**" />
+    <None Remove="Dashboard\Content\css\**" />
+    <None Remove="Dashboard\Content\js\**" />
+  </ItemGroup>-->
+
 
   <ItemGroup>
     <PackageReference Include="HangFire.Core" Version="1.7.6" />
