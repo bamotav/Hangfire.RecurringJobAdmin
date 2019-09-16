@@ -14,15 +14,17 @@
 
   <ItemGroup>
     <None Remove="Dashboard\Content\axios.min.js" />
+    <None Remove="Dashboard\Content\css\JobExtension.css" />
     <None Remove="Dashboard\Content\jobextension.js" />
     <None Remove="Dashboard\Content\vue.js" />
     <None Remove="Dashboard\JobExtension.html" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Dashboard\Content\axios.min.js" />
-    <EmbeddedResource Include="Dashboard\Content\jobextension.js" />
-    <EmbeddedResource Include="Dashboard\Content\vue.js" />
+    <EmbeddedResource Include="Dashboard\Content\css\JobExtension.css" />
+    <EmbeddedResource Include="Dashboard\Content\js\axios.min.js" />
+    <EmbeddedResource Include="Dashboard\Content\js\jobextension.js" />
+    <EmbeddedResource Include="Dashboard\Content\js\vue.js" />
     <EmbeddedResource Include="Dashboard\JobExtension.html" />
   </ItemGroup>
 
