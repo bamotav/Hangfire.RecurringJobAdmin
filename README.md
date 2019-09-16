@@ -37,5 +37,5 @@ GlobalConfiguration.Configuration.UseSqlServerStorage("HangfireConnection").UseR
 
 ## License
 Authored by: Brayan Mota (bamotav)
-
+This project is under MIT license. You can obtain the license copy [here](https://github.com/bamotav/Hangfire.RecurringJobAdmin/blob/master/LICENSE).
 
