@@ -7,7 +7,7 @@ A simple dashboard to manage Hangfire's recurring jobs.
 This repo is the extension for [Hangfire](https://github.com/HangfireIO/Hangfire) based on ["Hangfire.Recurring Job Extensions"](https://github.com/icsharp/Hangfire.RecurringJobExtensions/) package made by vigoss, thanks for your contribution to the community. It contains the following functionalities: 
 
 * we can use RecurringJobAttribute they are stored in database and presented in the administrator.
-* we can can create, edit jobs
+* we can create, edit jobs
 
 ## Instructions
 Install a package from Nuget. 
