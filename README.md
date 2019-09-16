@@ -21,7 +21,7 @@ services.AddHangfire(config => config.UseSqlServerStorage(Configuration.GetConne
 ```
 
 ## For NetFramework  :
-for service side:
+for startup side:
 ```csharp
 GlobalConfiguration.Configuration.UseSqlServerStorage("HangfireConnection").UseRecurringJobAdmin(typeof(Startup).Assembly)
 ```
