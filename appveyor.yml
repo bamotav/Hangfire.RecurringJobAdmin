@@ -1,11 +1,12 @@
+version: '{build}'
 image: Visual Studio 2017
 before_build:
 - cmd: dotnet restore
+skip_branch_with_pr: true
 skip_commits:
   files:
-- samples/**/*
-- '**/*.md'
-- .gitignore
-branches:
-  only:
-- master
+    - samples/**/*
+    - '**/*.md'
+    - .gitignore
+pull_requests:
+  do_not_increment_build_number: true
