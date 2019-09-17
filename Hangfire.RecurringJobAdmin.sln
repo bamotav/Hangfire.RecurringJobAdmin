@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hangfire.RecurringJobAdmin"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{BB50D194-6F29-4802-A8B6-FED80F0556EA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hangfire.Sample", "samples\Hangfire.RecurringJobAdmin.DotNetCore.Test\Hangfire.Sample.csproj", "{A24D7B8B-0DA7-4BB2-8F8F-8852F63F07BD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hangfire.Sample", "samples\Hangfire.Sample\Hangfire.Sample.csproj", "{A24D7B8B-0DA7-4BB2-8F8F-8852F63F07BD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
