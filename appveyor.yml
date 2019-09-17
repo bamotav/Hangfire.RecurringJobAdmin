@@ -3,8 +3,8 @@ before_build:
 - cmd: dotnet restore
 skip_commits:
   files:
-	- samples/**/*
-	- '**/*.md'
+    - samples/**/*
+    - '**/*.md'
     - .gitignore
   branches:
     only:
