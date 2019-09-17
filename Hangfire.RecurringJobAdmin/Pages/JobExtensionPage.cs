@@ -30,7 +30,6 @@ namespace Hangfire.RecurringJobAdmin.Pages
         private void WriteLiteralLine(string textToAppend)
         {
             WriteLiteral(textToAppend);
-           // WriteConfig();
             WriteLiteral("\r\n");
         }
 

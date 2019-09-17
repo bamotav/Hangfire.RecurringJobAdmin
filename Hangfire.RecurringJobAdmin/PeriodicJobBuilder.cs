@@ -9,7 +9,6 @@ using System.Text;
 namespace Hangfire.RecurringJobAdmin
 {
 
-    //https://github.com/pjrharley/Hangfire.Core.Dashboard.Management/blob/master/Support/JobsHelper.cs
     public static class PeriodicJobBuilder
     {
         public static List<RecurringJobAttribute> Metadata { get; private set; }
@@ -21,9 +20,7 @@ namespace Hangfire.RecurringJobAdmin
             {
                 foreach (var method in type.GetTypeInfo().DeclaredMethods)
                 {
-                    //foreach (Type ti in assembly.GetTypes().Where(x => !x.IsInterface && x.GetCustomAttribute<RecurringJobAttribute>() != null))
-                    //{
-
+                    
                     if (!method.IsDefined(typeof(RecurringJobAttribute), false)) continue;
 
                     var attribute = method.GetCustomAttribute<RecurringJobAttribute>(false);
@@ -45,23 +42,6 @@ namespace Hangfire.RecurringJobAdmin
                               string.IsNullOrEmpty(attribute.TimeZone) ? TimeZoneInfo.Utc : TimeZoneInfo.FindSystemTimeZoneById(attribute.TimeZone),
                               attribute.Queue ?? EnqueuedState.DefaultQueue);
 
-                    //foreach (var methodInfo in ti.GetMethods().Where(m => m.DeclaringType == ti))
-                    //{
-                    //    var meta = new JobMetadata { Type = ti, Queue = q };
-
-                    //    if (methodInfo.GetCustomAttributes(true).OfType<DescriptionAttribute>().Any())
-                    //    {
-                    //        meta.Description = methodInfo.GetCustomAttribute<DescriptionAttribute>().Description;
-                    //    }
-
-                    //    if (methodInfo.GetCustomAttributes(true).OfType<DisplayNameAttribute>().Any())
-                    //    {
-                    //        meta.MethodInfo = methodInfo;
-                    //        meta.DisplayName = methodInfo.GetCustomAttribute<DisplayNameAttribute>().DisplayName;
-                    //    }
-
-                    //    Metadata.Add(meta);
-                    //}
                 }
 
             }

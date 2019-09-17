@@ -1,6 +1,4 @@
-﻿<!--<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vue"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.min.js"></script>-->
-<link rel="stylesheet" type="text/css" href="JobConfiguration/css/jobExtension" />
+﻿<link rel="stylesheet" type="text/css" href="JobConfiguration/css/jobExtension" />
 <script type="text/javascript" src="JobConfiguration/js/vue"></script>
 <script type="text/javascript" src="JobConfiguration/js/axio"></script>
 <script defer type="text/javascript" src="JobConfiguration/js/page"></script>
@@ -30,7 +28,6 @@
                             close
                         </button>
                         <slot name="footer">
-                            <!-- @click="$emit('close')"-->
                             <button class="modal-default-button btn btn-success" @click="$emit('close')">
                                 OK
                             </button>
@@ -54,7 +51,6 @@
             <div class="form-group">
                 <label for="jobId">Job Id</label>
                 <input type="text" class="form-control" v-model="job.Id" id="jobId" aria-describedby="emailHelp" placeholder="Enter Job Id">
-                <!--<small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>-->
             </div>
             <div class="form-group">
                 <label for="cron">Cron</label>
