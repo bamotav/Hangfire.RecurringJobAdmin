@@ -1,3 +1,11 @@
 image: Visual Studio 2017
 before_build:
 - cmd: dotnet restore
+skip_commits:
+  files:
+	- samples/**/*
+	- '**/*.md'
+    - .gitignore
+  branches:
+    only:
+    - master
