@@ -152,35 +152,25 @@
         methods: {
             addJob() {
 
-                var $this = this;
-                $.ajax({
-                    async: true,
-                    cache: false,
-                    url: "JobConfiguration/UpdateJobs",
-                    data: this.job,
-                    type: "post",
-                    success: function (r) {
+                this.UpdateJob(this.job);
+            },
+            GetJobs() {
+                axios.get('JobConfiguration/GetJobs')
+                     .then(res => (this.jobs = res.data))
+            },
+            UpdateJob(job) {
 
-                        axios.get('JobConfiguration/GetJobs')
-                            .then(res => ($this.jobs = res.data));
-
-                        $this.showModal = false;
-                        $this.$emit('close');
-                    },
-                    error: function (r) {
-
-                        alert('Error');
-                        $this.showModal = false;
-                        $this.$emit('close');
-                    }
+                axios.get('JobConfiguration/UpdateJobs', job).then(response => {
+                    console.log(response);
+                }).catch(e => {
+                    console.log(e);
                 });
             }
-        },
-        mounted() {
 
-            axios
-                .get('JobConfiguration/GetJobs')
-                .then(res => (this.jobs = res.data))
+        },
+        created() {
+
+            this.GetJobs();
         }
     });
 </script>
