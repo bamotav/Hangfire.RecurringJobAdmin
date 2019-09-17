@@ -26,9 +26,9 @@ namespace Hangfire.RecurringJobAdmin.Pages
             var recurringJob = _connection.GetRecurringJobs();
             var periodicJob = new List<PeriodicJob>();
 
+
             recurringJob.ForEach((x) =>
             {
-
                 periodicJob.Add(new PeriodicJob
                 {
                     Id = x.Id,
@@ -36,6 +36,8 @@ namespace Hangfire.RecurringJobAdmin.Pages
                     CreatedAt = x.CreatedAt,
                     Error = x.Error,
                     LastExecution = x.LastExecution,
+                    Method = x.Job.Method.Name,
+                    Class = x.Job.Method.ReflectedType.FullName,
                     Queue = x.Queue,
                     LastJobId = x.LastJobId,
                     LastJobState = x.LastJobState,
