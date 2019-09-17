@@ -101,6 +101,7 @@
                             <th>Id</th>
                             <th>Cron</th>
                             <th>Queue</th>
+                            <th>Class</th>
                             <th>Method</th>
                             <th>Last Execution</th>
                             <th>Next Execution</th>
@@ -112,7 +113,8 @@
                             <td>{{job.Id}}</td>
                             <td>{{job.Cron}}</td>
                             <td>{{job.Queue}}</td>
-                            <td></td>
+                            <td>{{job.Class}}</td>
+                            <td>{{job.Method}}</td>
                             <td>{{job.LastExecution}}</td>
                             <td>{{job.NextExecution}}</td>
                             <td> <button type="button" class="btn btn-warning" onclick="onPost()">Edit</button></td>
