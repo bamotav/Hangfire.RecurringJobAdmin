@@ -198,7 +198,7 @@
     <Content Include="Scripts\jquery-3.3.1.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Hangfire.RecurringJobAdmin\Hangfire.RecurringJobAdmin.csproj">
+    <ProjectReference Include="..\..\src\Hangfire.RecurringJobAdmin\Hangfire.RecurringJobAdmin.csproj">
       <Project>{19bb87f5-8c75-4d72-8f7f-acd0cbdc04c3}</Project>
       <Name>Hangfire.RecurringJobAdmin</Name>
     </ProjectReference>
