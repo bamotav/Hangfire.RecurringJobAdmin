@@ -18,11 +18,18 @@ namespace Hangfire.RecurringJobAdmin.Pages
         private readonly IStorageConnection _connection;
         public GetJobDispatcher()
         {
-
             _connection = JobStorage.Current.GetConnection();
         }
         public async Task Dispatch([NotNull] DashboardContext context)
         {
+            if (!"GET".Equals(context.Request.Method, StringComparison.InvariantCultureIgnoreCase))
+            {
+                context.Response.StatusCode = 405;
+
+                return;
+            }
+
+
             var recurringJob = _connection.GetRecurringJobs();
             var periodicJob = new List<PeriodicJob>();
 
@@ -49,12 +56,7 @@ namespace Hangfire.RecurringJobAdmin.Pages
 
 
 
-            if (!"GET".Equals(context.Request.Method, StringComparison.InvariantCultureIgnoreCase))
-            {
-                context.Response.StatusCode = 405;
-
-                return;
-            }
+           
 
             await context.Response.WriteAsync(JsonConvert.SerializeObject(periodicJob));
         }
