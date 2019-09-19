@@ -1,7 +1,9 @@
 ﻿<link rel="stylesheet" type="text/css" href="JobConfiguration/css/jobExtension" />
 <script type="text/javascript" src="JobConfiguration/js/vue"></script>
 <script type="text/javascript" src="JobConfiguration/js/axio"></script>
+<script type="text/javascript" src="JobConfiguration/js/sweetalert"></script>
 <script defer type="text/javascript" src="JobConfiguration/js/page"></script>
+
 
 
 
@@ -132,6 +134,13 @@
         template: '#modal-template'
     });
 
+    //Swal.fire({
+    //    title: 'Error!',
+    //    text: response.Message,
+    //    type: 'error',
+    //    confirmButtonText: 'Okay'
+    //});
+                    
     var appJob = new Vue({
         el: '#app',
         data() {
@@ -159,14 +168,13 @@
             GetJob(_Id) {
                 axios.get('JobConfiguration/GetJob?Id=' + _Id).then(response => {
 
-                    if (response.data != null)
-                    {
-                          this.showModal = true;
-                    this.job.Id = response.data.Object.Id;
-                    this.job.Cron = response.data.Object.Cron;
-                    this.job.Queue = response.data.Object.Queue;
-                    this.job.Class = response.data.Object.Class;
-                    this.job.Method = response.data.Object.Method;
+                    if (response.data != null) {
+                        this.showModal = true;
+                        this.job.Id = response.data.Object.Id;
+                        this.job.Cron = response.data.Object.Cron;
+                        this.job.Queue = response.data.Object.Queue;
+                        this.job.Class = response.data.Object.Class;
+                        this.job.Method = response.data.Object.Method;
 
                     }
                 }).catch(e => {
@@ -186,7 +194,22 @@
                 var params = arr.join('&');
 
                 axios.get('JobConfiguration/UpdateJobs?' + params).then(response => {
-                    console.log(response);
+                    
+                    if (!response.data.Status) {
+
+                        this.showModal = false;
+
+                        Swal.fire({
+                            title: 'Error!',
+                            text: response.data.Message,
+                            type: 'error',
+                            confirmButtonText: 'Okay'
+                        }).then((result) => {
+
+                             this.showModal = true;
+                        });
+                    }
+                    
                 }).catch(e => {
                     console.log(e);
                 });
