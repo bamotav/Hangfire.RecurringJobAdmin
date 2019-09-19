@@ -154,11 +154,21 @@
             },
             GetJobs() {
                 axios.get('JobConfiguration/GetJobs')
-                     .then(res => (this.jobs = res.data))
+                    .then(res => (this.jobs = res.data))
             },
             UpdateJob(job) {
 
-                axios.get('JobConfiguration/UpdateJobs', job).then(response => {
+                var arr = [];
+
+                for (var key in job) {
+                    if (job.hasOwnProperty(key)) {
+                        arr.push(key + '=' + job[key]);
+                    }
+                };
+
+                var params = arr.join('&');
+
+                axios.get('JobConfiguration/UpdateJobs?' + params).then(response => {
                     console.log(response);
                 }).catch(e => {
                     console.log(e);
