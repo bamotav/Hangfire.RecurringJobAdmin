@@ -34,7 +34,7 @@ namespace Hangfire.RecurringJobAdmin.Pages
             job.Method = context.Request.GetQuery("Method");
             job.Queue = context.Request.GetQuery("Queue");
 
-            if (Utility.IsValidSchedule(job.Cron))
+            if (!Utility.IsValidSchedule(job.Cron))
             {
                 response.Status = false;
                 response.Message = "Invalid CRON";

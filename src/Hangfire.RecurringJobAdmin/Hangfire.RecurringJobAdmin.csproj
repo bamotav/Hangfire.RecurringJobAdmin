@@ -16,6 +16,7 @@
     <None Remove="Dashboard\Content\css\JobExtension.css" />
     <None Remove="Dashboard\Content\js\axios.min.js" />
     <None Remove="Dashboard\Content\js\jobextension.js" />
+    <None Remove="Dashboard\Content\js\sweetalert.js" />
     <None Remove="Dashboard\Content\js\vue.js" />
     <None Remove="Dashboard\JobExtension.html" />
   </ItemGroup>
@@ -28,6 +29,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Dashboard\Content\js\jobextension.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dashboard\Content\js\sweetalert.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="Dashboard\Content\js\vue.js">
