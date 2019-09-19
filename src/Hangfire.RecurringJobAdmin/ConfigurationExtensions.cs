@@ -39,6 +39,9 @@ namespace Hangfire.RecurringJobAdmin
             DashboardRoutes.Routes.AddRazorPage(JobExtensionPage.PageRoute, x => new JobExtensionPage());
             DashboardRoutes.Routes.Add("/JobConfiguration/GetJobs", new GetJobDispatcher());
             DashboardRoutes.Routes.Add("/JobConfiguration/UpdateJobs", new ChangeJobDispatcher());
+            DashboardRoutes.Routes.Add("/JobConfiguration/GetJob", new GetJobForEdit());
+            
+
 
             NavigationMenu.Items.Add(page => new MenuItem(JobExtensionPage.Title, "JobConfiguration")
             {

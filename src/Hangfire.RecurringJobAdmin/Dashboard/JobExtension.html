@@ -113,7 +113,7 @@
                             <td>{{job.Method}}</td>
                             <td>{{job.LastExecution}}</td>
                             <td>{{job.NextExecution}}</td>
-                            <td> <button type="button" class="btn btn-warning" onclick="onPost()">Edit</button></td>
+                            <td> <button type="button" class="btn btn-warning" @click="GetJob(job.Id)">Edit</button></td>
                         </tr>
 
                     </tbody>
@@ -155,6 +155,23 @@
             GetJobs() {
                 axios.get('JobConfiguration/GetJobs')
                     .then(res => (this.jobs = res.data))
+            },
+            GetJob(_Id) {
+                axios.get('JobConfiguration/GetJob?Id=' + _Id).then(response => {
+
+                    if (response.data != null)
+                    {
+                          this.showModal = true;
+                    this.job.Id = response.data.Object.Id;
+                    this.job.Cron = response.data.Object.Cron;
+                    this.job.Queue = response.data.Object.Queue;
+                    this.job.Class = response.data.Object.Class;
+                    this.job.Method = response.data.Object.Method;
+
+                    }
+                }).catch(e => {
+                    console.log(e);
+                });
             },
             UpdateJob(job) {
 
