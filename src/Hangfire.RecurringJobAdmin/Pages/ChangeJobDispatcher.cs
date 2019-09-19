@@ -28,11 +28,11 @@ namespace Hangfire.RecurringJobAdmin.Pages
             var response = new Response() { Status = true };
 
             var job = new PeriodicJob();
-            job.Id = (await context.Request.GetFormValuesAsync("Id"))[0];
-            job.Cron = (await context.Request.GetFormValuesAsync("Cron"))[0];
-            job.Class = (await context.Request.GetFormValuesAsync("Class"))[0];
-            job.Method = (await context.Request.GetFormValuesAsync("Method"))[0];
-            job.Queue = (await context.Request.GetFormValuesAsync("Queue"))[0];
+            job.Id = context.Request.GetQuery("Id");
+            job.Cron = context.Request.GetQuery("Cron");
+            job.Class = context.Request.GetQuery("Class");
+            job.Method = context.Request.GetQuery("Method");
+            job.Queue = context.Request.GetQuery("Queue");
 
             if (Utility.IsValidSchedule(job.Cron))
             {
