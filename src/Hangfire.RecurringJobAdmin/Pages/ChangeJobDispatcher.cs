@@ -27,17 +27,18 @@ namespace Hangfire.RecurringJobAdmin.Pages
         {
 
             var job = new PeriodicJob();
-            job.Id = (await context.Request.GetFormValuesAsync("Id"))[0];
-            job.Cron = (await context.Request.GetFormValuesAsync("Cron"))[0];
-            job.Class = (await context.Request.GetFormValuesAsync("Class"))[0];
-            job.Method = (await context.Request.GetFormValuesAsync("Method"))[0];
-            job.Queue = (await context.Request.GetFormValuesAsync("Queue"))[0];
+            job.Id = context.Request.GetQuery("Id");
+            job.Cron = context.Request.GetQuery("Cron");
+            job.Class = context.Request.GetQuery("Class");
+            job.Method = context.Request.GetQuery("Method");
+            job.Queue = context.Request.GetQuery("Queue");
 
             var manager = new RecurringJobManager(context.Storage);
 
             manager.AddOrUpdate(job.Id, () => ReflectionHelper.InvokeVoidMethod(job.Class, job.Method), job.Cron, TimeZoneInfo.Utc, job.Queue);
 
             context.Response.StatusCode = (int)HttpStatusCode.OK;
+
             await context.Response.WriteAsync(JsonConvert.SerializeObject(job));
 
         }
