@@ -26,11 +26,11 @@
                     </div>
 
                     <div class="modal-footer">
-                        <button class="modal-default-button btn btn-danger pull-left" @click="$emit('close')">
+                        <button class="modal-default-button btn btn-danger pull-left" @click="closeModal">
                             close
                         </button>
                         <slot name="footer">
-                            <button class="modal-default-button btn btn-success" @click="$emit('close')">
+                            <button class="modal-default-button btn btn-success" @click="closeModal">
                                 OK
                             </button>
                         </slot>
@@ -44,12 +44,12 @@
 
 <div id="app">
 
-    <modal v-if="showModal" @close="showModal = false">
+    <modal v-if="showModal" @close="closeModal">
         <!--
           you can use custom content here to overwrite
           default content
         -->
-        <form slot="body">
+        <form slot="body" id="formJob">
             <div class="form-group">
                 <label for="jobId">Job Id</label>
                 <input type="text" class="form-control" v-model="job.Id" id="jobId" aria-describedby="emailHelp" placeholder="Enter Job Id">
@@ -84,13 +84,13 @@
             </button>
         </div>
 
-        <h3 slot="header">Add New Job</h3>
+        <h3 slot="header">{{title}}</h3>
     </modal>
     <div class="row">
 
         <div class="col-md-12" style="margin-top: 30px">
             <h1 class="page-header">Recurring Jobs <span class="badge badge-warning">{{jobs.length}}</span></h1>
-            <button type="button" class="btn btn-primary" style="margin-bottom: 20px;" @click="showModal = true">Add new Job</button>
+            <button type="button" class="btn btn-primary" style="margin-bottom: 20px;" @click="OpenModal">Add new Job</button>
             <div class="table-responsive">
                 <table class="table">
 
@@ -131,20 +131,22 @@
 
 <script>
     Vue.component('modal', {
-        template: '#modal-template'
+        template: '#modal-template',
+        methods: {
+            closeModal() {
+                this.$emit('close');
+    
+            }
+
+        }
     });
 
-    //Swal.fire({
-    //    title: 'Error!',
-    //    text: response.Message,
-    //    type: 'error',
-    //    confirmButtonText: 'Okay'
-    //});
                     
     var appJob = new Vue({
         el: '#app',
         data() {
             return {
+                title: 'Add New Job',
                 jobs: null,
                 showModal: false,
                 job: {
@@ -166,6 +168,7 @@
                     .then(res => (this.jobs = res.data))
             },
             GetJob(_Id) {
+                this.title = 'Edit Job';
                 axios.get('JobConfiguration/GetJob?Id=' + _Id).then(response => {
 
                     if (response.data != null) {
@@ -205,17 +208,37 @@
                             type: 'error',
                             confirmButtonText: 'Okay'
                         }).then((result) => {
-
-                             this.showModal = true;
+                                this.closeModal();
                         });
+                    } else {
+              
+                       this.closeModal();
+                       this.GetJobs();
                     }
                     
                 }).catch(e => {
                     console.log(e);
                 });
+            },
+            closeModal() {
+
+                this.job = {
+                    Id: '',
+                    Cron: '',
+                    Queue: '',
+                    Class: '',
+                    Method: '',
+                };
+
+                this.showModal = false;
+            },
+            OpenModal() {
+                this.title = 'Add New Job';
+                this.showModal = true;
             }
 
         },
+        
         created() {
 
             this.GetJobs();
