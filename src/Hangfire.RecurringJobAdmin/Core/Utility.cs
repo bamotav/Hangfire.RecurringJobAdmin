@@ -40,7 +40,7 @@ namespace Hangfire.RecurringJobAdmin.Core
             {
                 var scheduleLocal = CronExpression.Parse(schedule);
 
-                return Regex.IsMatch(schedule, regexCron);
+                return true; //Regex.IsMatch(schedule, regexCron);
             }
             catch (Exception)
             {
