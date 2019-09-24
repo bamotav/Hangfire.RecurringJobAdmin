@@ -6,9 +6,9 @@ using System.Text;
 
 namespace Hangfire.RecurringJobAdmin.Attributes
 {
-    public class DisableConcurrentlyJobExecution : JobFilterAttribute, IElectStateFilter
+    public class DisableConcurrentlyJobExecutionAttribute : JobFilterAttribute, IElectStateFilter
     {
-        public DisableConcurrentlyJobExecution() { }
+        public DisableConcurrentlyJobExecutionAttribute() { }
 
         
         public readonly int _from = 0;
@@ -21,7 +21,7 @@ namespace Hangfire.RecurringJobAdmin.Attributes
         /// 
         /// </summary>
         /// <param name="methodName"></param>
-        public DisableConcurrentlyJobExecution(string methodName)
+        public DisableConcurrentlyJobExecutionAttribute(string methodName)
         {
             _methodName = methodName;
 
@@ -33,7 +33,7 @@ namespace Hangfire.RecurringJobAdmin.Attributes
         /// <param name="methodName"></param>
         /// <param name="from"></param>
         /// <param name="count"></param>
-        public DisableConcurrentlyJobExecution(string methodName, int from = 0, int count = 2000)
+        public DisableConcurrentlyJobExecutionAttribute(string methodName, int from = 0, int count = 2000)
         {
             _from = from;
             _count = count;
@@ -47,7 +47,7 @@ namespace Hangfire.RecurringJobAdmin.Attributes
         /// <param name="from"></param>
         /// <param name="count"></param>
         /// <param name="reason"></param>
-        public DisableConcurrentlyJobExecution(string methodName, int from = 0, int count = 2000, string reason = "It is not allowed to perform multiple same tasks.")
+        public DisableConcurrentlyJobExecutionAttribute(string methodName, int from = 0, int count = 2000, string reason = "It is not allowed to perform multiple same tasks.")
         {
             _from = from;
             _count = count;
