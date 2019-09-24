@@ -13,6 +13,7 @@ namespace Hangfire.JobExtensions.DotNetCore.Test
             Console.WriteLine("Desde otro proyecto");
         }
 
+        [DisableConcurrentlyJobExecution("")]
         [RecurringJob("*/2 * * * *", "China Standard Time", "default", RecurringJobId = "Prueba-desde-atributo")]
         public void OtroTesting()
         {
