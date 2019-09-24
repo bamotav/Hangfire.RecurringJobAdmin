@@ -6,18 +6,18 @@ using System.Threading.Tasks;
 
 namespace Hangfire.JobExtensions.DotNetCore.Test
 {
-    public class TestExecution
+    public class TestExecutionJob
     {
-        public void Testing()
+        public void TestConsole()
         {
-            Console.WriteLine("Desde otro proyecto");
+            Console.WriteLine("Testing Console");
         }
 
-        [DisableConcurrentlyJobExecution("")]
-        [RecurringJob("*/2 * * * *", "China Standard Time", "default", RecurringJobId = "Prueba-desde-atributo")]
-        public void OtroTesting()
+        [DisableConcurrentlyJobExecution("CheckFileExists")]
+        [RecurringJob("*/2 * * * *", "China Standard Time", "default", RecurringJobId = "Check-File-Exists")]
+        public void CheckFileExists()
         {
-            Console.WriteLine("Desde atributo");
+            Console.WriteLine("Check File Exists");
         }
     }
 }
