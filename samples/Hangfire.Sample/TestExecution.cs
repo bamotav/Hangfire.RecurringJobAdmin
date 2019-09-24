@@ -13,7 +13,7 @@ namespace Hangfire.JobExtensions.DotNetCore.Test
             Console.WriteLine("Testing Console");
         }
 
-        [DisableConcurrentlyJobExecution("CheckFileExists")]
+        [DisableConcurrentlyJobExecution("CheckFileExists", 0, 10, "It is not allowed to perform multiple same tasks.")]
         [RecurringJob("*/2 * * * *", "China Standard Time", "default", RecurringJobId = "Check-File-Exists")]
         public void CheckFileExists()
         {
