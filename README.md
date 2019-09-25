@@ -1,6 +1,7 @@
 # Hangfire.RecurringJobAdmin
 [![NuGet](https://buildstats.info/nuget/Hangfire.RecurringJobAdmin)](https://www.nuget.org/packages/Hangfire.RecurringJobAdmin/)
 [![Build status](https://ci.appveyor.com/api/projects/status/u2xrias2vk727beg/branch/master?svg=true)](https://ci.appveyor.com/project/bamotav/hangfire-recurringjobadmin/branch/master)
+[![Official Site](https://img.shields.io/badge/site-hangfire.io-blue.svg)](http://hangfire.io)
 [![License MIT](https://img.shields.io/badge/license-MIT-green.svg)](http://opensource.org/licenses/MIT)
 
 
