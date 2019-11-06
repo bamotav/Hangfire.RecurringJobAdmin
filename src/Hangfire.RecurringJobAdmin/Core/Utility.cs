@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Resources;
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using Cronos;
@@ -28,6 +29,17 @@ namespace Hangfire.RecurringJobAdmin.Core
             }
         }
 
+        public static string MD5(string str)
+        {
+            byte[] b = Encoding.UTF8.GetBytes(str);
+            b = new MD5CryptoServiceProvider().ComputeHash(b);
+            string ret = string.Empty;
+            for (int i = 0; i < b.Length; i++)
+            {
+                ret += b[i].ToString("x").PadLeft(2, '0');
+            }
+            return ret;
+        }
 
         /// <summary>
         /// 
