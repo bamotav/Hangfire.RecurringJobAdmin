@@ -7,16 +7,14 @@
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
   </PropertyGroup>
 
-
   <ItemGroup>
     <PackageReference Include="Hangfire.AspNetCore" Version="1.7.6" />
     <PackageReference Include="HangFire.SqlServer" Version="1.7.6" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
-    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.7.12" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.7.12" Condition="'$(TargetFramework)' == 'net462'" />
   </ItemGroup>
-
-
+  
   <ItemGroup>
     <ProjectReference Include="..\..\src\Hangfire.RecurringJobAdmin\Hangfire.RecurringJobAdmin.csproj" />
   </ItemGroup>
