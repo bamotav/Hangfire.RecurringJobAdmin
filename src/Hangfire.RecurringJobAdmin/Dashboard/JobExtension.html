@@ -45,37 +45,43 @@
 <div id="app">
 
     <modal v-if="showModal" @close="closeModal">
-        <!--
-          you can use custom content here to overwrite
-          default content
-        -->
+        
         <form slot="body" id="formJob">
+
             <div class="form-group">
                 <label for="jobId">Job Id</label>
-                <input type="text" class="form-control" v-model="job.Id" id="jobId" aria-describedby="emailHelp" placeholder="Enter Job Id">
+                <input type="text" class="form-control" v-model="job.Id" id="jobId" name="jobId" aria-describedby="emailHelp" placeholder="Enter Job Id">
             </div>
             <div class="form-group">
                 <label for="cron">Cron</label>
-                <input type="text" class="form-control" id="cron" v-model="job.Cron" placeholder="Enter Cron (Unix time)">
+                <input type="text" class="form-control" id="cron" v-model="job.Cron" name="cron" placeholder="Enter Cron (Unix time)">
             </div>
 
             <div class="form-group">
                 <label for="class">Class</label>
-                <input type="text" class="form-control" v-model="job.Class" aria-describedby="class" id="class" placeholder="Enter Class Name">
+                <input type="text" class="form-control" v-model="job.Class" name="class" aria-describedby="class" id="class" placeholder="Enter Class Name">
                 <small id="class" class="form-text text-muted">Please provider path complete about your class example: Hangfire.RecurringJob.MyClass</small>
             </div>
 
             <div class="form-group">
                 <label for="method">Method</label>
-                <input type="text" class="form-control" v-model="job.Method" id="method" placeholder="Enter Method Name">
+                <input type="text" class="form-control" v-model="job.Method" id="method" name="method" placeholder="Enter Method Name">
             </div>
 
             <div class="form-group">
                 <label for="queue">Queue</label>
-                <input type="text" class="form-control" v-model="job.Queue" id="queue" placeholder="Enter Queue Name">
+                <input type="text" class="form-control" v-model="job.Queue" name="queue" id="queue" placeholder="Enter Queue Name">
             </div>
 
-
+            <div class="form-group">
+                <p v-if="errors.length> 0">
+                    <!-- <p v-if="showErrorMessage">-->
+                    <b  style="color:red">Please correct the following error(s):</b>
+                    <ul>
+                        <li v-for="error in errors" style="color:red">{{ error }}</li>
+                    </ul>
+                </p>
+            </div>
         </form>
 
         <div slot="footer">
@@ -135,7 +141,6 @@
         methods: {
             closeModal() {
                 this.$emit('close');
-    
             }
 
         }
@@ -149,6 +154,7 @@
                 title: 'Add New Job',
                 jobs: null,
                 showModal: false,
+                errors: [],
                 job: {
                     Id: '',
                     Cron: '',
@@ -185,7 +191,9 @@
                 });
             },
             UpdateJob(job) {
-
+                
+                if (this.checkForm())
+                {
                 var arr = [];
 
                 for (var key in job) {
@@ -219,6 +227,7 @@
                 }).catch(e => {
                     console.log(e);
                 });
+                }
             },
             closeModal() {
 
@@ -229,18 +238,42 @@
                     Class: '',
                     Method: '',
                 };
-
+                this.errors = [];
                 this.showModal = false;
             },
             OpenModal() {
                 this.title = 'Add New Job';
                 this.showModal = true;
-            }
+            },
+            checkForm: function (e) {
+                this.errors = [];
+                if (!this.job.Id) {
+                    console.log(this.jobId);
+                     this.errors.push("Job Id is required.");
+                }
+                if (!this.job.Cron) {
+                     this.errors.push("Cron is required.");
+                }
+                if (!this.job.Class) {
+                     this.errors.push("Class is required.");
+                }
+                if (!this.job.Method) {
+                     this.errors.push("Methodo is required.");
+                }
+                if (!this.job.Queue) {
+                     this.errors.push("Queue is required.");
+                }
 
+                if (!this.errors.length) return true;
+                
+                if (this.errors.length)  return false;
+                
+                //e.preventDefault();
+            }
         },
         
         created() {
-
+          
             this.GetJobs();
         }
     });
