@@ -1,11 +1,19 @@
-name: .NET Core
+name: CI-HRJ
 
-on: [push]
+on:
+  pull_request:
+        branches: 
+          - master    
+  push:
+    branches: 
+      - master
+
+
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
+
 
     steps:
     - uses: actions/checkout@v1
