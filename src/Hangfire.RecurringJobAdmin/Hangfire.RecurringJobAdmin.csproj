@@ -1,7 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+    
+    <PropertyGroup Condition=" '$(OS)' != 'Windows_NT' ">
+        <TargetFramework>netstandard2.0</TargetFramework>
+    </PropertyGroup>
 
+    <PropertyGroup Condition=" '$(OS)' == 'Windows_NT' ">
+        <TargetFrameworks>netstandard2.0;net462</TargetFrameworks>
+    </PropertyGroup>    
+    
   <PropertyGroup>
-      <TargetFrameworks>netstandard2.0;net462</TargetFrameworks>
       <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
       <Authors>Brayan Mota, Braulio Alvarez</Authors>
       <Copyright>Copyright © 2019-present Hangfire.Extension contributors</Copyright>
