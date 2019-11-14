@@ -16,7 +16,7 @@
       <PackageProjectUrl>https://github.com/bamotav/Hangfire.RecurringJobAdmin.git</PackageProjectUrl>
       <RepositoryUrl>https://github.com/bamotav/Hangfire.RecurringJobAdmin.git</RepositoryUrl>
       <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-      <Version>0.0.6</Version>
+      <Version>0.0.7</Version>
   </PropertyGroup>
 
   <ItemGroup>
