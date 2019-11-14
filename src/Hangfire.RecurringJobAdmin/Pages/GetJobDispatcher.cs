@@ -33,26 +33,29 @@ namespace Hangfire.RecurringJobAdmin.Pages
             var recurringJob = _connection.GetRecurringJobs();
             var periodicJob = new List<PeriodicJob>();
 
-
-            recurringJob.ForEach((x) =>
+            if (periodicJob.Count >  0)
             {
-                periodicJob.Add(new PeriodicJob
+                recurringJob.ForEach((x) =>
                 {
-                    Id = x.Id,
-                    Cron = x.Cron,
-                    CreatedAt = x.CreatedAt,
-                    Error = x.Error,
-                    LastExecution = x.LastExecution,
-                    Method = x.Job.Method.Name,
-                    Class = x.Job.Method.ReflectedType.FullName,
-                    Queue = x.Queue,
-                    LastJobId = x.LastJobId,
-                    LastJobState = x.LastJobState,
-                    NextExecution = x.NextExecution,
-                    Removed = x.Removed,
-                    TimeZoneId = x.TimeZoneId
+                    periodicJob.Add(new PeriodicJob
+                    {
+                        Id = x.Id,
+                        Cron = x.Cron,
+                        CreatedAt = x.CreatedAt,
+                        Error = x.Error,
+                        LastExecution = x.LastExecution,
+                        Method = x.Job.Method.Name,
+                        Class = x.Job.Method.ReflectedType.FullName,
+                        Queue = x.Queue,
+                        LastJobId = x.LastJobId,
+                        LastJobState = x.LastJobState,
+                        NextExecution = x.NextExecution,
+                        Removed = x.Removed,
+                        TimeZoneId = x.TimeZoneId
+                    });
                 });
-            });
+            }
+            
 
 
 
