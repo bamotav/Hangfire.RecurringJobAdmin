@@ -33,7 +33,7 @@ namespace Hangfire.RecurringJobAdmin.Pages
             var recurringJob = _connection.GetRecurringJobs();
             var periodicJob = new List<PeriodicJob>();
 
-            if (periodicJob.Count >  0)
+            if (recurringJob.Count >  0)
             {
                 recurringJob.ForEach((x) =>
                 {
