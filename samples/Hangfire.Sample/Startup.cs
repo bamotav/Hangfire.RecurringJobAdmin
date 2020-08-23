@@ -37,9 +37,10 @@ namespace Hangfire.JobExtensions
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
+
+
             services.AddHangfire(config => config
-                                                 .UseLiteDbStorage()
-                                                 //.UseSqlServerStorage(Configuration.GetConnectionString("HangfireConnection"))
+                                                 .UseLiteDbStorage(Configuration.GetConnectionString("HangfireConnection"))
                                                  .UseRecurringJobAdmin(typeof(Startup).Assembly));
             services.AddHangfireServer();
         }
