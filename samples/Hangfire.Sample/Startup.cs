@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Hangfire.Common;
+using Hangfire.LiteDB;
 using Hangfire.RecurringJobAdmin;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -36,7 +37,10 @@ namespace Hangfire.JobExtensions
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
-            services.AddHangfire(config => config.UseSqlServerStorage(Configuration.GetConnectionString("HangfireConnection"))
+
+
+            services.AddHangfire(config => config
+                                                 .UseLiteDbStorage(Configuration.GetConnectionString("HangfireConnection"))
                                                  .UseRecurringJobAdmin(typeof(Startup).Assembly));
             services.AddHangfireServer();
         }
