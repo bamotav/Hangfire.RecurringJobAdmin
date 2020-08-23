@@ -10,9 +10,13 @@
   <ItemGroup>
     <PackageReference Include="Hangfire.AspNetCore" Version="1.7.6" />
     <PackageReference Include="HangFire.SqlServer" Version="1.7.6" />
-    <PackageReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.AspNetCore.App">
+      <PrivateAssets Condition="'%(PackageReference.Version)' == ''">all</PrivateAssets>
+      <Publish Condition="'%(PackageReference.Version)' == ''">true</Publish>
+    </PackageReference>
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.7.12" Condition="'$(TargetFramework)' == 'net462'" />
+    <PackageReference Include="Hangfire.LiteDB" Version="0.3.1" />
   </ItemGroup>
   
   <ItemGroup>
