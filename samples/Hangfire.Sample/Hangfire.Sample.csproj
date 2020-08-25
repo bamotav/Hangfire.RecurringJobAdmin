@@ -24,6 +24,9 @@
   
   <ItemGroup>
     <ProjectReference Include="..\..\src\Hangfire.RecurringJobAdmin\Hangfire.RecurringJobAdmin.csproj" />
+    <ProjectReference Include="..\Hangfire.SampleLibrary\Hangfire.SampleLibrary.csproj">
+      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+    </ProjectReference>
   </ItemGroup>
 
 </Project>
