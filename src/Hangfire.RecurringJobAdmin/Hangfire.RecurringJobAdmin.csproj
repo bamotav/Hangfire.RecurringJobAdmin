@@ -10,13 +10,13 @@
     
   <PropertyGroup>
       <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-      <Authors>Brayan Mota, Braulio Alvarez</Authors>
-      <Copyright>Copyright © 2019-present Hangfire.Extension contributors</Copyright>
+      <Authors>Brayan Mota</Authors>
+      <Copyright>Copyright © 2020-present Hangfire.Extension contributors</Copyright>
       <NeutralLanguage>en</NeutralLanguage>
       <PackageProjectUrl>https://github.com/bamotav/Hangfire.RecurringJobAdmin.git</PackageProjectUrl>
       <RepositoryUrl>https://github.com/bamotav/Hangfire.RecurringJobAdmin.git</RepositoryUrl>
-      <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
       <Version>0.0.7</Version>
+      <PackOnBuild>true</PackOnBuild>
   </PropertyGroup>
 
   <ItemGroup>
