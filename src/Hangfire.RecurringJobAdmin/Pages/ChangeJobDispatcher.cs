@@ -2,6 +2,7 @@
 using Hangfire.Dashboard;
 using Hangfire.RecurringJobAdmin.Core;
 using Hangfire.RecurringJobAdmin.Models;
+using Hangfire.States;
 using Hangfire.Storage;
 using Newtonsoft.Json;
 using System;
@@ -45,9 +46,27 @@ namespace Hangfire.RecurringJobAdmin.Pages
             }
             
 
-            var manager = new RecurringJobManager(context.Storage);
+          //  var manager = new RecurringJobManager(context.Storage);
 
-            manager.AddOrUpdate(job.Id, () => ReflectionHelper.InvokeVoidMethod(job.Class, job.Method), job.Cron, TimeZoneInfo.Utc, job.Queue);
+         //   manager.AddOrUpdate(job.Id, () => ReflectionHelper.InvokeVoidMethod(job.Class, job.Method), job.Cron, TimeZoneInfo.Utc, job.Queue);
+
+
+            var _registry = new RecurringJobRegistry();
+
+           
+
+            Type calledType = StorageAssemblySingleton.GetInstance()._assembly.GetType(job.Class);
+
+            var methodInfo = calledType.GetMethod(job.Method);
+
+            _registry.Register(
+                      job.Id,
+                      methodInfo,
+                      job.Cron,
+                       TimeZoneInfo.Utc,
+                      //string.IsNullOrEmpty(attribute.TimeZone) ? TimeZoneInfo.Utc : TimeZoneInfo.FindSystemTimeZoneById(attribute.TimeZone),
+                      job.Queue ?? EnqueuedState.DefaultQueue);
+
 
             context.Response.StatusCode = (int)HttpStatusCode.OK;
 
