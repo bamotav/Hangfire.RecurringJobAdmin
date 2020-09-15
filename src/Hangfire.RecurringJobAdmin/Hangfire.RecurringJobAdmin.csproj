@@ -15,7 +15,7 @@
       <NeutralLanguage>en</NeutralLanguage>
       <PackageProjectUrl>https://github.com/bamotav/Hangfire.RecurringJobAdmin.git</PackageProjectUrl>
       <RepositoryUrl>https://github.com/bamotav/Hangfire.RecurringJobAdmin.git</RepositoryUrl>
-      <Version>0.0.7</Version>
+      <Version>0.0.8</Version>
       <PackOnBuild>true</PackOnBuild>
   </PropertyGroup>
 

@@ -1,5 +1,6 @@
 ﻿using Hangfire.Annotations;
 using Hangfire.Dashboard;
+using Hangfire.RecurringJobAdmin.Core;
 using Hangfire.RecurringJobAdmin.Pages;
 using System;
 using System.Reflection;
@@ -22,6 +23,8 @@ namespace Hangfire.RecurringJobAdmin
         public static IGlobalConfiguration UseRecurringJobAdmin(this IGlobalConfiguration config, Assembly assembly)
         {
             PeriodicJobBuilder.GetAllJobs(assembly);
+            StorageAssemblySingleton.GetInstance().SetCurrentAssembly(assembly);
+
             CreateManagmentJob();
             return config;
         }

@@ -2,6 +2,7 @@
 using Hangfire.Dashboard;
 using Hangfire.RecurringJobAdmin.Core;
 using Hangfire.RecurringJobAdmin.Models;
+using Hangfire.States;
 using Hangfire.Storage;
 using Newtonsoft.Json;
 using System;
@@ -16,10 +17,13 @@ namespace Hangfire.RecurringJobAdmin.Pages
     internal sealed class ChangeJobDispatcher : IDashboardDispatcher
     {
         private readonly IStorageConnection _connection;
+        private readonly RecurringJobRegistry _recurringJobRegistry;
+
         public ChangeJobDispatcher()
         {
 
             _connection = JobStorage.Current.GetConnection();
+            _recurringJobRegistry = new RecurringJobRegistry();
         }
 
 
@@ -43,11 +47,38 @@ namespace Hangfire.RecurringJobAdmin.Pages
 
                 return;
             }
-            
 
-            var manager = new RecurringJobManager(context.Storage);
+            if (!StorageAssemblySingleton.GetInstance().IsValidType(job.Class))
+            {
+                response.Status = false;
+                response.Message = "The Class not found";
 
-            manager.AddOrUpdate(job.Id, () => ReflectionHelper.InvokeVoidMethod(job.Class, job.Method), job.Cron, TimeZoneInfo.Utc, job.Queue);
+                await context.Response.WriteAsync(JsonConvert.SerializeObject(response));
+
+                return;
+            }
+
+            if (!StorageAssemblySingleton.GetInstance().IsValidMethod(job.Class,job.Method))
+            {
+                response.Status = false;
+                response.Message = "The Method not found";
+
+                await context.Response.WriteAsync(JsonConvert.SerializeObject(response));
+
+                return;
+            }
+
+
+            var methodInfo = StorageAssemblySingleton.GetInstance().currentAssembly.GetType(job.Class).GetMethod(job.Method);
+
+            _recurringJobRegistry.Register(
+                      job.Id,
+                      methodInfo,
+                      job.Cron,
+                       TimeZoneInfo.Utc,
+                      //string.IsNullOrEmpty(attribute.TimeZone) ? TimeZoneInfo.Utc : TimeZoneInfo.FindSystemTimeZoneById(attribute.TimeZone),
+                      job.Queue ?? EnqueuedState.DefaultQueue);
+
 
             context.Response.StatusCode = (int)HttpStatusCode.OK;
 
