@@ -11,7 +11,7 @@ namespace Hangfire.RecurringJobAdmin.Core
 
         private static StorageAssemblySingleton _instance;
 
-        public Assembly _assembly { get; private set; }
+        public Assembly currentAssembly { get; private set; }
 
         public static StorageAssemblySingleton GetInstance()
         {
@@ -24,7 +24,11 @@ namespace Hangfire.RecurringJobAdmin.Core
 
         public void SetCurrentAssembly(Assembly assembly)
         {
-            _assembly = assembly;
+            currentAssembly = assembly;
         }
+
+        public bool IsValidType(string type) => currentAssembly.GetType(type) != null;
+
+        public bool IsValidMethod(string type, string method) => currentAssembly.GetType(type).GetMethod(method) != null;
     }
 }
