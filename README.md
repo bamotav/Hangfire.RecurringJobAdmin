@@ -48,6 +48,12 @@ public class RecurringJobTesting
 
 * We can create, edit jobs.
 
+![create](Content/create.png)
+
+* We can start, stop jobs at runtime.
+
+![jobAgent](Content/jobAgent.png)
+
 ## Instructions
 Install a package from Nuget. 
 ```

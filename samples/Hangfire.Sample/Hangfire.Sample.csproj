@@ -8,6 +8,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove=".DS_Store" />
+    <None Remove="HangfireSampleDb" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Hangfire.AspNetCore" Version="1.7.12" />
     <PackageReference Include="HangFire.SqlServer" Version="1.7.12" />
     <PackageReference Include="Microsoft.AspNetCore.App" Version="2.2.8">
