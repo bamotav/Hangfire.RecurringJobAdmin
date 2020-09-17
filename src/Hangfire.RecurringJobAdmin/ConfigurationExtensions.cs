@@ -43,6 +43,7 @@ namespace Hangfire.RecurringJobAdmin
             DashboardRoutes.Routes.Add("/JobConfiguration/GetJobs", new GetJobDispatcher());
             DashboardRoutes.Routes.Add("/JobConfiguration/UpdateJobs", new ChangeJobDispatcher());
             DashboardRoutes.Routes.Add("/JobConfiguration/GetJob", new GetJobForEdit());
+            DashboardRoutes.Routes.Add("/JobConfiguration/JobAgent", new JobAgentDispatcher());
 
 
 
