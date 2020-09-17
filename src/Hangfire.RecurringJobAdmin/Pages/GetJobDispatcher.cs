@@ -46,7 +46,7 @@ namespace Hangfire.RecurringJobAdmin.Pages
                         LastExecution = x.LastExecution,
                         Method = x.Job.Method.Name,
                         JobState = "Running",
-                        Class = x.Job.Method.ReflectedType.FullName,
+                        Class = x.Job.Type.Name,
                         Queue = x.Queue,
                         LastJobId = x.LastJobId,
                         LastJobState = x.LastJobState,

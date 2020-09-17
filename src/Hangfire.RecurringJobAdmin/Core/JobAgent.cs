@@ -10,15 +10,15 @@ namespace Hangfire.RecurringJobAdmin.Core
 {
     public static class JobAgent
     {
-        private const string tagRecurringJob = "recurring-jobs";
+        private const string tagRecurringJob = "recurring-job";
         private const string tagStopJob = "recurring-jobs-stop";
         public static void StartBackgroundJob(string JobId)
         {
             using (var connection = JobStorage.Current.GetConnection())
             using (var transaction = connection.CreateWriteTransaction())
             {
-                transaction.RemoveFromSet(tagRecurringJob, JobId);
-                transaction.AddToSet($"{tagRecurringJob}-stop", JobId);
+                transaction.RemoveFromSet(tagStopJob, JobId);
+                transaction.AddToSet($"{tagRecurringJob}s", JobId);
                 transaction.Commit();
             }
         }
@@ -27,8 +27,8 @@ namespace Hangfire.RecurringJobAdmin.Core
             using (var connection = JobStorage.Current.GetConnection())
             using (var transaction = connection.CreateWriteTransaction())
             {
-                transaction.RemoveFromSet(tagStopJob, JobId);
-                transaction.AddToSet($"{tagRecurringJob}", JobId);
+                transaction.RemoveFromSet($"{tagRecurringJob}s", JobId);
+                transaction.AddToSet($"{tagStopJob}", JobId);
                 transaction.Commit();
             }
         }
@@ -46,7 +46,7 @@ namespace Hangfire.RecurringJobAdmin.Core
 
                     var dataJob = connection.GetAllEntriesFromHash($"{tagRecurringJob}:{jobId}");
 
-
+                    dto.Id = jobId;
                     try
                     {
                         if (dataJob.TryGetValue("Job", out var payload) && !String.IsNullOrWhiteSpace(payload))
@@ -54,7 +54,7 @@ namespace Hangfire.RecurringJobAdmin.Core
                             var invocationData = InvocationData.DeserializePayload(payload);
                             var job = invocationData.DeserializeJob();
                             dto.Method = job.Method.Name;
-                            dto.Class = job.Method.ReflectedType.FullName;
+                            dto.Class = job.Type.Name;
                         }
                     }
                     catch (JobLoadException ex)
@@ -114,12 +114,14 @@ namespace Hangfire.RecurringJobAdmin.Core
             return outPut;
         }
 
-        public static bool IsValidJobId(string JobId)
+        public static bool IsValidJobId(string jobId)
         {
             var result = false;
             using (var connection = JobStorage.Current.GetConnection())
             {
-                result = connection.GetAllEntriesFromHash(JobId) != null;
+                var job = connection.GetAllEntriesFromHash($"{tagRecurringJob}:{jobId}");
+
+                result = job != null;
             }
             return result;
         }

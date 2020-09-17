@@ -45,7 +45,7 @@
 <div id="app">
 
     <modal v-if="showModal" @close="closeModal">
-        
+
         <form slot="body" id="formJob">
 
             <div class="form-group">
@@ -76,7 +76,7 @@
             <div class="form-group">
                 <p v-if="errors.length> 0">
                     <!-- <p v-if="showErrorMessage">-->
-                    <b  style="color:red">Please correct the following error(s):</b>
+                    <b style="color:red">Please correct the following error(s):</b>
                     <ul>
                         <li v-for="error in errors" style="color:red">{{ error }}</li>
                     </ul>
@@ -105,6 +105,7 @@
                             <th>Id</th>
                             <th>Cron</th>
                             <th>Queue</th>
+                            <th>Job State</th>
                             <th>Class</th>
                             <th>Method</th>
                             <th>Last Execution</th>
@@ -117,11 +118,17 @@
                             <td>{{job.Id}}</td>
                             <td>{{job.Cron}}</td>
                             <td>{{job.Queue}}</td>
+                            <td>{{job.JobState}}</td>
                             <td>{{job.Class}}</td>
                             <td>{{job.Method}}</td>
                             <td>{{job.LastExecution}}</td>
                             <td>{{job.NextExecution}}</td>
-                            <td> <button type="button" class="btn btn-warning" @click="GetJob(job.Id)">Edit</button></td>
+                            <td>
+                                <button type="button" class="btn btn-warning" @click="GetJob(job.Id)">Edit</button>
+                                <button type="button" class="btn btn-success" @click="StartJob(job.Id)">Start</button>
+                                <button type="button" class="btn btn-danger" @click="StopJob(job.Id)">Stop</button>
+                            </td>
+
                         </tr>
 
                     </tbody>
@@ -146,7 +153,7 @@
         }
     });
 
-                    
+
     var appJob = new Vue({
         el: '#app',
         data() {
@@ -161,6 +168,7 @@
                     Queue: '',
                     Class: '',
                     Method: '',
+                    JobState:'',
                 }
             }
         },
@@ -190,22 +198,10 @@
                     console.log(e);
                 });
             },
-            UpdateJob(job) {
-                
-                if (this.checkForm())
-                {
-                var arr = [];
+            StartJob(_jobId) {
 
-                for (var key in job) {
-                    if (job.hasOwnProperty(key)) {
-                        arr.push(key + '=' + job[key]);
-                    }
-                };
+                axios.get('JobConfiguration/JobAgent?Id=' + _jobId + "&Action=Start").then(response => {
 
-                var params = arr.join('&');
-
-                axios.get('JobConfiguration/UpdateJobs?' + params).then(response => {
-                    
                     if (!response.data.Status) {
 
                         this.showModal = false;
@@ -216,17 +212,80 @@
                             type: 'error',
                             confirmButtonText: 'Okay'
                         }).then((result) => {
-                                this.closeModal();
+                            this.closeModal();
                         });
                     } else {
-              
-                       this.closeModal();
-                       this.GetJobs();
+
+                        this.closeModal();
+                        this.GetJobs();
                     }
-                    
+
                 }).catch(e => {
                     console.log(e);
                 });
+            },
+            StopJob(_jobId) {
+
+                axios.get('JobConfiguration/JobAgent?Id=' + _jobId + "&Action=Stop").then(response => {
+
+                    if (!response.data.Status) {
+
+                        this.showModal = false;
+
+                        Swal.fire({
+                            title: 'Error!',
+                            text: response.data.Message,
+                            type: 'error',
+                            confirmButtonText: 'Okay'
+                        }).then((result) => {
+                            this.closeModal();
+                        });
+                    } else {
+
+                        this.closeModal();
+                        this.GetJobs();
+                    }
+
+                }).catch(e => {
+                    console.log(e);
+                });
+            },
+            UpdateJob(job) {
+
+                if (this.checkForm()) {
+                    var arr = [];
+
+                    for (var key in job) {
+                        if (job.hasOwnProperty(key)) {
+                            arr.push(key + '=' + job[key]);
+                        }
+                    };
+
+                    var params = arr.join('&');
+
+                    axios.get('JobConfiguration/UpdateJobs?' + params).then(response => {
+
+                        if (!response.data.Status) {
+
+                            this.showModal = false;
+
+                            Swal.fire({
+                                title: 'Error!',
+                                text: response.data.Message,
+                                type: 'error',
+                                confirmButtonText: 'Okay'
+                            }).then((result) => {
+                                this.closeModal();
+                            });
+                        } else {
+
+                            this.closeModal();
+                            this.GetJobs();
+                        }
+
+                    }).catch(e => {
+                        console.log(e);
+                    });
                 }
             },
             closeModal() {
@@ -249,31 +308,31 @@
                 this.errors = [];
                 if (!this.job.Id) {
                     console.log(this.jobId);
-                     this.errors.push("Job Id is required.");
+                    this.errors.push("Job Id is required.");
                 }
                 if (!this.job.Cron) {
-                     this.errors.push("Cron is required.");
+                    this.errors.push("Cron is required.");
                 }
                 if (!this.job.Class) {
-                     this.errors.push("Class is required.");
+                    this.errors.push("Class is required.");
                 }
                 if (!this.job.Method) {
-                     this.errors.push("Methodo is required.");
+                    this.errors.push("Methodo is required.");
                 }
                 if (!this.job.Queue) {
-                     this.errors.push("Queue is required.");
+                    this.errors.push("Queue is required.");
                 }
 
                 if (!this.errors.length) return true;
-                
-                if (this.errors.length)  return false;
-                
+
+                if (this.errors.length) return false;
+
                 //e.preventDefault();
             }
         },
-        
+
         created() {
-          
+
             this.GetJobs();
         }
     });
