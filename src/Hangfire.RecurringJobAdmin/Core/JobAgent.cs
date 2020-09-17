@@ -29,6 +29,16 @@ namespace Hangfire.RecurringJobAdmin.Core
                 transaction.Commit();
             }
         }
-    
+
+        public static bool IsValidJobId(string JobId)
+        {
+            var result = false;
+            using (var connection = JobStorage.Current.GetConnection())
+            {
+                result = connection.GetAllEntriesFromHash(JobId) != null;
+            }
+            return result;
+        }
+
     }
 }
