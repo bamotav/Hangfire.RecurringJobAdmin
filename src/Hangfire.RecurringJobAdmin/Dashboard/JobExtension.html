@@ -124,9 +124,9 @@
                             <td>{{job.LastExecution}}</td>
                             <td>{{job.NextExecution}}</td>
                             <td>
-                                <button type="button" class="btn btn-warning" @click="GetJob(job.Id)">Edit</button>
-                                <button type="button" class="btn btn-success" @click="StartJob(job.Id)">Start</button>
-                                <button type="button" class="btn btn-danger" @click="StopJob(job.Id)">Stop</button>
+                                <button type="button"  class="btn btn-warning" @click="GetJob(job.Id)">Edit</button>
+                                <button type="button" v-if="job.JobState == 'Stopped'" class="btn btn-success" @click="StartJob(job.Id)">Start</button>
+                                <button type="button" v-if="job.JobState == 'Running'"  class="btn btn-danger" @click="StopJob(job.Id)">Stop</button>
                             </td>
 
                         </tr>
