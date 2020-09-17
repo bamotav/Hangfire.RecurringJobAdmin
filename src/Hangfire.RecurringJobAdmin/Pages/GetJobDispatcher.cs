@@ -45,6 +45,7 @@ namespace Hangfire.RecurringJobAdmin.Pages
                         Error = x.Error,
                         LastExecution = x.LastExecution,
                         Method = x.Job.Method.Name,
+                        JobState = "Running",
                         Class = x.Job.Method.ReflectedType.FullName,
                         Queue = x.Queue,
                         LastJobId = x.LastJobId,
@@ -55,11 +56,9 @@ namespace Hangfire.RecurringJobAdmin.Pages
                     });
                 });
             }
-            
 
-
-
-           
+            //Add job was stopped:
+            periodicJob.AddRange(JobAgent.GetAllJobStopped());
 
             await context.Response.WriteAsync(JsonConvert.SerializeObject(periodicJob));
         }

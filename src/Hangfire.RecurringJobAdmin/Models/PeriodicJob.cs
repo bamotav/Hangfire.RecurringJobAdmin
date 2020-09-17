@@ -20,6 +20,8 @@ namespace Hangfire.RecurringJobAdmin.Models
 
         public string Method { get; set; }
 
+        public string JobState { get; set; }
+
         public DateTime? NextExecution { get; set; }
         public string LastJobId { get; set; }
         public string LastJobState { get; set; }
