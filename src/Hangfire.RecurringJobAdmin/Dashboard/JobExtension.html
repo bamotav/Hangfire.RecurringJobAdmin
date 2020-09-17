@@ -27,11 +27,11 @@
 
                     <div class="modal-footer">
                         <button class="modal-default-button btn btn-danger pull-left" @click="closeModal">
-                            close
+                            Close
                         </button>
                         <slot name="footer">
                             <button class="modal-default-button btn btn-success" @click="closeModal">
-                                OK
+                                Save
                             </button>
                         </slot>
                     </div>
@@ -105,7 +105,7 @@
                             <th>Id</th>
                             <th>Cron</th>
                             <th>Queue</th>
-                            <th>Job State</th>
+                            <th>State</th>
                             <th>Class</th>
                             <th>Method</th>
                             <th>Last Execution</th>
