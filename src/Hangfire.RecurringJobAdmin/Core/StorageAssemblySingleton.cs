@@ -3,7 +3,7 @@ using System.Reflection;
 
 namespace Hangfire.RecurringJobAdmin.Core
 {
-    public class StorageAssemblySingleton
+    internal sealed class StorageAssemblySingleton
     {
         private StorageAssemblySingleton()
         {

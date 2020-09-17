@@ -15,8 +15,9 @@
       <NeutralLanguage>en</NeutralLanguage>
       <PackageProjectUrl>https://github.com/bamotav/Hangfire.RecurringJobAdmin.git</PackageProjectUrl>
       <RepositoryUrl>https://github.com/bamotav/Hangfire.RecurringJobAdmin.git</RepositoryUrl>
-      <Version>0.0.9</Version>
+      <Version>0.1.5</Version>
       <PackOnBuild>true</PackOnBuild>
+      <Description>A simple dashboard to manage Hangfire's recurring jobs.</Description>
   </PropertyGroup>
 
   <ItemGroup>

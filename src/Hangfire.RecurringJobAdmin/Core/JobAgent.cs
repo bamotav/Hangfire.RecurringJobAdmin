@@ -1,59 +1,130 @@
 ﻿using Hangfire.Common;
 using Hangfire.RecurringJobAdmin.Models;
+using Hangfire.Storage;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Hangfire.RecurringJobAdmin.Core
 {
     public static class JobAgent
     {
-        public static bool StartBackgroundJob(JobItem jobItem)
+        private const string tagRecurringJob = "recurring-job";
+        private const string tagStopJob = "recurring-jobs-stop";
+        public static void StartBackgroundJob(string JobId)
         {
-            try
+            using (var connection = JobStorage.Current.GetConnection())
+            using (var transaction = connection.CreateWriteTransaction())
             {
-                if (string.IsNullOrEmpty(jobItem.Data)) return true;
-                using (var connection = JobStorage.Current.GetConnection())
+                transaction.RemoveFromSet(tagStopJob, JobId);
+                transaction.AddToSet($"{tagRecurringJob}s", JobId);
+                transaction.Commit();
+            }
+        }
+        public static void StopBackgroundJob(string JobId)
+        {
+            using (var connection = JobStorage.Current.GetConnection())
+            using (var transaction = connection.CreateWriteTransaction())
+            {
+                transaction.RemoveFromSet($"{tagRecurringJob}s", JobId);
+                transaction.AddToSet($"{tagStopJob}", JobId);
+                transaction.Commit();
+            }
+        }
+
+        public static List<PeriodicJob> GetAllJobStopped()
+        {
+            var outPut = new List<PeriodicJob>();
+            using (var connection = JobStorage.Current.GetConnection())
+            {
+                var allJobStopped = connection.GetAllItemsFromSet(tagStopJob);
+
+                allJobStopped.ToList().ForEach(jobId =>
                 {
-                    var hashKey = Utility.MD5(jobItem.JobName + ".runtime");
-                    using (var tran = connection.CreateWriteTransaction())
+                    var dto = new PeriodicJob();
+
+                    var dataJob = connection.GetAllEntriesFromHash($"{tagRecurringJob}:{jobId}");
+
+                    dto.Id = jobId;
+                    try
                     {
-                        tran.SetRangeInHash(hashKey, new List<KeyValuePair<string, string>>
+                        if (dataJob.TryGetValue("Job", out var payload) && !String.IsNullOrWhiteSpace(payload))
                         {
-                            new KeyValuePair<string, string>("Data", jobItem.Data)
-                        });
-                        tran.Commit();
+                            var invocationData = InvocationData.DeserializePayload(payload);
+                            var job = invocationData.DeserializeJob();
+                            dto.Method = job.Method.Name;
+                            dto.Class = job.Type.Name;
+                        }
                     }
-                }
-                return true;
-            }
-            catch (Exception ex)
-            {
-               // Logger.ErrorException("HttpJobDispatcher.StartBackgroudJob", ex);
-                return false;
-            }
-        }
-        public static bool StopBackgroundJob(JobItem jobItem)
-        {
-            try
-            {
-                using (var connection = JobStorage.Current.GetConnection())
-                {
-                    var hashKey = Utility.MD5(jobItem.JobName + ".runtime");
-                    using (var tran = connection.CreateWriteTransaction())
+                    catch (JobLoadException ex)
                     {
-                        tran.SetRangeInHash(hashKey, new List<KeyValuePair<string, string>> { new KeyValuePair<string, string>("Action", "stop") });
-                        tran.Commit();
+                        dto.Error = ex.Message;
                     }
-                }
-                return true;
+
+
+                    if (dataJob.ContainsKey("NextExecution"))
+                    {
+                        dto.NextExecution = JobHelper.DeserializeNullableDateTime(dataJob["NextExecution"]);
+                    }
+
+                    if (dataJob.ContainsKey("LastJobId") && !string.IsNullOrWhiteSpace(dataJob["LastJobId"]))
+                    {
+                        dto.LastJobId = dataJob["LastJobId"];
+
+                        var stateData = connection.GetStateData(dto.LastJobId);
+                        if (stateData != null)
+                        {
+                            dto.LastJobState = stateData.Name;
+                        }
+                    }
+
+                    if (dataJob.ContainsKey("Queue"))
+                    {
+                        dto.Queue = dataJob["Queue"];
+                    }
+
+                    if (dataJob.ContainsKey("LastExecution"))
+                    {
+                        dto.LastExecution = JobHelper.DeserializeNullableDateTime(dataJob["LastExecution"]);
+                    }
+
+                    if (dataJob.ContainsKey("TimeZoneId"))
+                    {
+                        dto.TimeZoneId = dataJob["TimeZoneId"];
+                    }
+
+                    if (dataJob.ContainsKey("CreatedAt"))
+                    {
+                        dto.CreatedAt = JobHelper.DeserializeNullableDateTime(dataJob["CreatedAt"]);
+                    }
+
+                    if (dataJob.TryGetValue("Error", out var error) && !String.IsNullOrEmpty(error))
+                    {
+                        dto.Error = error;
+                    }
+
+                    dto.Removed = false;
+                    dto.JobState = "Stopped";
+
+                    outPut.Add(dto);
+
+                });
             }
-            catch (Exception ex)
-            {
-               // Logger.ErrorException("HttpJobDispatcher.StopBackgroudJob", ex);
-                return false;
-            }
+            return outPut;
         }
-    
+
+        public static bool IsValidJobId(string jobId)
+        {
+            var result = false;
+            using (var connection = JobStorage.Current.GetConnection())
+            {
+                var job = connection.GetAllEntriesFromHash($"{tagRecurringJob}:{jobId}");
+
+                result = job != null;
+            }
+            return result;
+        }
+
     }
 }
