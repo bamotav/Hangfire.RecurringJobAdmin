@@ -47,9 +47,10 @@ namespace Hangfire.RecurringJobAdmin
 
 
 
-            NavigationMenu.Items.Add(page => new MenuItem(JobExtensionPage.Title, "JobConfiguration")
+            NavigationMenu.Items.Add(page => new MenuItem(JobExtensionPage.Title, page.Url.To("/JobConfiguration"))
             {
-                Active = page.RequestPath.StartsWith(JobExtensionPage.PageRoute)
+                Active = page.RequestPath.StartsWith(JobExtensionPage.PageRoute),
+                Metric = DashboardMetrics.RecurringJobCount
             });
 
             AddDashboardRouteToEmbeddedResource("/JobConfiguration/js/page", "application/js", "Hangfire.RecurringJobAdmin.Dashboard.Content.js.jobextension.js");
