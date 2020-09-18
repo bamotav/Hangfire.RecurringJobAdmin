@@ -9,42 +9,46 @@ using System.Text;
 namespace Hangfire.RecurringJobAdmin
 {
 
-    public static class PeriodicJobBuilder
+    internal static class PeriodicJobBuilder
     {
         public static List<RecurringJobAttribute> Metadata { get; private set; }
-        internal static void GetAllJobs(Assembly assembly)
+        internal static void GetAllJobs()
         {
             Metadata = new List<RecurringJobAttribute>();
 
-            foreach (var type in assembly.GetTypes())
+            foreach (var assembly in StorageAssemblySingleton.GetInstance().currentAssembly)
             {
-                foreach (var method in type.GetTypeInfo().DeclaredMethods)
+                foreach (var type in assembly.GetTypes())
                 {
-                    
-                    if (!method.IsDefined(typeof(RecurringJobAttribute), false)) continue;
-
-                    var attribute = method.GetCustomAttribute<RecurringJobAttribute>(false);
-
-                    if (attribute == null) continue;
-
-                    if (method.GetCustomAttributes(true).OfType<RecurringJobAttribute>().Any())
+                    foreach (var method in type.GetTypeInfo().DeclaredMethods)
                     {
-                        var attr = method.GetCustomAttribute<RecurringJobAttribute>();
-                        Metadata.Add(attr);
+
+                        if (!method.IsDefined(typeof(RecurringJobAttribute), false)) continue;
+
+                        var attribute = method.GetCustomAttribute<RecurringJobAttribute>(false);
+
+                        if (attribute == null) continue;
+
+                        if (method.GetCustomAttributes(true).OfType<RecurringJobAttribute>().Any())
+                        {
+                            var attr = method.GetCustomAttribute<RecurringJobAttribute>();
+                            Metadata.Add(attr);
+                        }
+
+                        var _registry = new RecurringJobRegistry();
+
+                        _registry.Register(
+                                  attribute.RecurringJobId,
+                                  method,
+                                  attribute.Cron,
+                                  string.IsNullOrEmpty(attribute.TimeZone) ? TimeZoneInfo.Utc : TimeZoneInfo.FindSystemTimeZoneById(attribute.TimeZone),
+                                  attribute.Queue ?? EnqueuedState.DefaultQueue);
+
                     }
 
-                    var _registry = new RecurringJobRegistry();
-
-                    _registry.Register(
-                              attribute.RecurringJobId,
-                              method,
-                              attribute.Cron,
-                              string.IsNullOrEmpty(attribute.TimeZone) ? TimeZoneInfo.Utc : TimeZoneInfo.FindSystemTimeZoneById(attribute.TimeZone),
-                              attribute.Queue ?? EnqueuedState.DefaultQueue);
-
                 }
-
             }
+
         }
     }
 }
