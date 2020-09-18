@@ -13,7 +13,8 @@ namespace Hangfire.RecurringJobAdmin
         [PublicAPI]
         public static IGlobalConfiguration UseRecurringJobAdmin(this IGlobalConfiguration config, string assembly)
         {
-            PeriodicJobBuilder.GetAllJobs(Type.GetType(assembly).Assembly);
+            StorageAssemblySingleton.GetInstance().SetCurrentAssembly(Type.GetType(assembly).Assembly);
+            PeriodicJobBuilder.GetAllJobs();
             CreateManagmentJob();
             return config;
         }
@@ -22,9 +23,8 @@ namespace Hangfire.RecurringJobAdmin
         [PublicAPI]
         public static IGlobalConfiguration UseRecurringJobAdmin(this IGlobalConfiguration config, Assembly assembly)
         {
-            PeriodicJobBuilder.GetAllJobs(assembly);
             StorageAssemblySingleton.GetInstance().SetCurrentAssembly(assembly);
-
+            PeriodicJobBuilder.GetAllJobs();
             CreateManagmentJob();
             return config;
         }

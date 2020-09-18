@@ -7,6 +7,7 @@ using Hangfire.Storage;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Net;
 using System.Text;
@@ -58,7 +59,7 @@ namespace Hangfire.RecurringJobAdmin.Pages
                 return;
             }
 
-            if (!StorageAssemblySingleton.GetInstance().IsValidMethod(job.Class,job.Method))
+            if (!StorageAssemblySingleton.GetInstance().IsValidMethod(job.Class, job.Method))
             {
                 response.Status = false;
                 response.Message = "The Method not found";
@@ -69,7 +70,11 @@ namespace Hangfire.RecurringJobAdmin.Pages
             }
 
 
-            var methodInfo = StorageAssemblySingleton.GetInstance().currentAssembly.GetType(job.Class).GetMethod(job.Method);
+            var methodInfo = StorageAssemblySingleton.GetInstance().currentAssembly
+                                                                                .Where(x => x?.GetType(job.Class)?.GetMethod(job.Method) != null)
+                                                                                .FirstOrDefault()
+                                                                                .GetType(job.Class)
+                                                                                .GetMethod(job.Method);
 
             _recurringJobRegistry.Register(
                       job.Id,

@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Reflection;
 
 namespace Hangfire.RecurringJobAdmin.Core
@@ -11,9 +14,9 @@ namespace Hangfire.RecurringJobAdmin.Core
 
         private static StorageAssemblySingleton _instance;
 
-        public Assembly currentAssembly { get; private set; }
+        public List<Assembly> currentAssembly { get; private set; } = new List<Assembly>();
 
-        public static StorageAssemblySingleton GetInstance()
+        internal static StorageAssemblySingleton GetInstance()
         {
             if (_instance == null)
             {
@@ -22,13 +25,24 @@ namespace Hangfire.RecurringJobAdmin.Core
             return _instance;
         }
 
-        public void SetCurrentAssembly(Assembly assembly)
+        internal void SetCurrentAssembly(Assembly assembly)
         {
-            currentAssembly = assembly;
+            currentAssembly.Add(assembly);
+
+            var referencedPaths = Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "*.dll");
+            var toLoad = referencedPaths.Where(r => !assembly.Location.Equals(r))
+                                        .Where(x => !x.Contains("Hangfire.RecurringJobAdmin.dll"))
+                                        .ToList();
+
+            toLoad.ForEach(path => currentAssembly.Add(Assembly.LoadFile(path)));
+
         }
 
-        public bool IsValidType(string type) => currentAssembly.GetType(type) != null;
+        public bool IsValidType(string type) => currentAssembly.Any(x => x.GetType(type) != null);
 
-        public bool IsValidMethod(string type, string method) => currentAssembly.GetType(type).GetMethod(method) != null;
+        public bool IsValidMethod(string type, string method) => currentAssembly?
+                                                                    .FirstOrDefault(x => x.GetType(type) != null)?.GetType(type)?.GetMethod(method) != null;
+
+
     }
 }
