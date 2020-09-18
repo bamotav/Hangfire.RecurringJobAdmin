@@ -54,6 +54,19 @@ public class RecurringJobTesting
 
 ![jobAgent](Content/jobAgent.png)
 
+* So we can also start or stop the job using JobAgent static class.
+
+```csharp
+
+   JobAgent.StopBackgroundJob("Enter the Job Id");
+   
+   JobAgent.StartBackgroundJob("Enter the Job Id");
+   
+   //Get all stopped jobs:
+   var StoppedJobs = JobAgent.GetAllJobStopped();
+   
+```
+
 ## Instructions
 Install a package from Nuget. 
 ```
