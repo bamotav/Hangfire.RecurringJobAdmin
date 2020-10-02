@@ -9,7 +9,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{BB50
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hangfire.Sample", "samples\Hangfire.Sample\Hangfire.Sample.csproj", "{A24D7B8B-0DA7-4BB2-8F8F-8852F63F07BD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hangfire.Sample.Library", "Hangfire.Sample.Library\Hangfire.Sample.Library.csproj", "{B7957204-5516-4BFC-86BC-FBCDD0506B55}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hangfire.Sample.Library", "samples\Hangfire.Sample.Library\Hangfire.Sample.Library.csproj", "{B7957204-5516-4BFC-86BC-FBCDD0506B55}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
