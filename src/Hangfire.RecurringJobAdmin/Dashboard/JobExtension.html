@@ -58,6 +58,11 @@
             </div>
 
             <div class="form-group">
+                <label for="cron">Time Zone</label>
+                <input type="text" class="form-control" id="timezoneid" v-model="job.TimeZoneId" name="cron" placeholder="Enter the Time Zone">
+            </div>
+
+            <div class="form-group">
                 <label for="class">Class</label>
                 <input type="text" class="form-control" v-model="job.Class" name="class" aria-describedby="class" id="class" placeholder="Enter Class Name">
                 <small id="class" class="form-text text-muted">Please provider path complete about your class example: Hangfire.RecurringJob.MyClass</small>
@@ -108,8 +113,8 @@
                             <th>State</th>
                             <th>Class</th>
                             <th>Method</th>
-                            <th>Last Execution</th>
                             <th>Next Execution</th>
+                            <th>Last Execution</th>
                             <th>Options</th>
                         </tr>
                     </thead>
@@ -118,7 +123,10 @@
                             <td>{{job.Id}}</td>
                             <td>{{job.Cron}}</td>
                             <td>{{job.Queue}}</td>
-                            <td>{{job.JobState}}</td>
+                            <td>
+                                <span v-if="job.JobState == 'Running'" class="label label-success">{{job.JobState}}</span>
+                                <span v-if="job.JobState == 'Stopped'" class="label label-danger">{{job.JobState}}</span>
+                            </td>
                             <td>{{job.Class}}</td>
                             <td>{{job.Method}}</td>
                             <td>{{job.LastExecution}}</td>
@@ -166,6 +174,7 @@
                     Id: '',
                     Cron: '',
                     Queue: '',
+                    TimeZoneId: '',
                     Class: '',
                     Method: '',
                     JobState:'',
@@ -192,6 +201,7 @@
                         this.job.Queue = response.data.Object.Queue;
                         this.job.Class = response.data.Object.Class;
                         this.job.Method = response.data.Object.Method;
+                        this.job.TimeZoneId = response.data.Object.TimeZoneId;
 
                     }
                 }).catch(e => {

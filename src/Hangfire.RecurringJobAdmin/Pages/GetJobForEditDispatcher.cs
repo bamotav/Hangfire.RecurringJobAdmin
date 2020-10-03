@@ -56,13 +56,13 @@ namespace Hangfire.RecurringJobAdmin.Pages
                 Cron = recurringJob.Cron,
                 CreatedAt = recurringJob.CreatedAt,
                 Error = recurringJob.Error,
-                LastExecution = recurringJob.LastExecution,
+//                LastExecution = recurringJob.LastExecution,
                 Method = recurringJob.Job.Method.Name,
                 Class = recurringJob.Job.Method.ReflectedType.FullName,
                 Queue = recurringJob.Queue,
                 LastJobId = recurringJob.LastJobId,
                 LastJobState = recurringJob.LastJobState,
-                NextExecution = recurringJob.NextExecution,
+//                NextExecution = recurringJob.NextExecution,
                 Removed = recurringJob.Removed,
                 TimeZoneId = recurringJob.TimeZoneId
             };

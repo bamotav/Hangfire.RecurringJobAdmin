@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Hangfire.Annotations;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -13,6 +14,8 @@ namespace Hangfire.RecurringJobAdmin.Core
         }
 
         private static StorageAssemblySingleton _instance;
+        private string[] prefixIgnore = new[] { "Hangfire.RecurringJobAdmin.dll", "Microsoft." };
+
 
         public List<Assembly> currentAssembly { get; private set; } = new List<Assembly>();
 
@@ -25,16 +28,19 @@ namespace Hangfire.RecurringJobAdmin.Core
             return _instance;
         }
 
-        internal void SetCurrentAssembly(Assembly assembly)
+        internal void SetCurrentAssembly(bool includeReferences = false, params Assembly[] assemblies)
         {
-            currentAssembly.Add(assembly);
+            currentAssembly.AddRange(assemblies);
 
-            var referencedPaths = Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "*.dll");
-            var toLoad = referencedPaths.Where(r => !assembly.Location.Equals(r))
-                                        .Where(x => !x.Contains("Hangfire.RecurringJobAdmin.dll"))
-                                        .ToList();
+            if (includeReferences)
+            {
+                var referencedPaths = Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "*.dll");
+                var toLoad = referencedPaths.Where(r => !assemblies.Any(x => x.Location.Equals(r)))
+                                .Where(x => !prefixIgnore.Any(p => p.Contains(x)))
+                                .ToList();
 
-            toLoad.ForEach(path => currentAssembly.Add(Assembly.LoadFile(path)));
+                toLoad.ForEach(path => currentAssembly.Add(Assembly.LoadFile(path)));
+            }
 
         }
 
