@@ -38,9 +38,6 @@ namespace Hangfire.RecurringJobAdmin.Pages
             job.Class = context.Request.GetQuery("Class");
             job.Method = context.Request.GetQuery("Method");
             job.Queue = context.Request.GetQuery("Queue");
-            job.TimeZoneId = context.Request.GetQuery("TimeZoneId");
-
-            var timeZone = TimeZoneInfo.Utc;
 
             if (!Utility.IsValidSchedule(job.Cron))
             {
@@ -51,24 +48,6 @@ namespace Hangfire.RecurringJobAdmin.Pages
 
                 return;
             }
-
-            try
-            {
-                if (!string.IsNullOrEmpty(job.TimeZoneId))
-                {
-                    timeZone = TimeZoneInfo.FindSystemTimeZoneById(job.TimeZoneId);
-                }
-            }
-            catch (Exception ex)
-            {
-                response.Status = false;
-                response.Message = ex.Message;
-
-                await context.Response.WriteAsync(JsonConvert.SerializeObject(response));
-
-                return;
-            }
-          
 
             if (!StorageAssemblySingleton.GetInstance().IsValidType(job.Class))
             {
@@ -101,7 +80,8 @@ namespace Hangfire.RecurringJobAdmin.Pages
                       job.Id,
                       methodInfo,
                       job.Cron,
-                      timeZone,
+                       TimeZoneInfo.Utc,
+                      //string.IsNullOrEmpty(attribute.TimeZone) ? TimeZoneInfo.Utc : TimeZoneInfo.FindSystemTimeZoneById(attribute.TimeZone),
                       job.Queue ?? EnqueuedState.DefaultQueue);
 
 

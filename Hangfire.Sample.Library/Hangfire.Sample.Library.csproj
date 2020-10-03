@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Hangfire.RecurringJobAdmin\Hangfire.RecurringJobAdmin.csproj" />
+    <ProjectReference Include="..\src\Hangfire.RecurringJobAdmin\Hangfire.RecurringJobAdmin.csproj" />
   </ItemGroup>
 
 </Project>

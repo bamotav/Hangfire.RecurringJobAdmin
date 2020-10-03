@@ -1,27 +1,26 @@
 ﻿using Hangfire.Annotations;
 using Hangfire.Common;
+using Hangfire.Dashboard;
 using Hangfire.RecurringJobAdmin.Core;
 using Hangfire.RecurringJobAdmin.Models;
 using Hangfire.Storage;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq.Expressions;
-using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Hangfire.RecurringJobAdmin.Pages
 {
-    internal sealed class GetJobDispatcher : Dashboard.IDashboardDispatcher
+    internal sealed class GetJobDispatcher : IDashboardDispatcher
     {
         private readonly IStorageConnection _connection;
         public GetJobDispatcher()
         {
             _connection = JobStorage.Current.GetConnection();
         }
-        public async Task Dispatch([NotNull] Dashboard.DashboardContext context)
+        public async Task Dispatch([NotNull] DashboardContext context)
         {
             if (!"GET".Equals(context.Request.Method, StringComparison.InvariantCultureIgnoreCase))
             {
@@ -33,8 +32,6 @@ namespace Hangfire.RecurringJobAdmin.Pages
 
             var recurringJob = _connection.GetRecurringJobs();
             var periodicJob = new List<PeriodicJob>();
-            
-
 
             if (recurringJob.Count >  0)
             {
@@ -46,14 +43,14 @@ namespace Hangfire.RecurringJobAdmin.Pages
                         Cron = x.Cron,
                         CreatedAt = x.CreatedAt,
                         Error = x.Error,
-                        LastExecution = x.LastExecution.HasValue ? x.LastExecution.Value.ToString("G") : "N/A",//x.LastExecution,
+                        LastExecution = x.LastExecution,
                         Method = x.Job.Method.Name,
                         JobState = "Running",
                         Class = x.Job.Type.Name,
                         Queue = x.Queue,
                         LastJobId = x.LastJobId,
                         LastJobState = x.LastJobState,
-                        NextExecution = x.NextExecution.HasValue ? x.NextExecution.Value.ToString("G") : "N/A",
+                        NextExecution = x.NextExecution,
                         Removed = x.Removed,
                         TimeZoneId = x.TimeZoneId
                     });

@@ -41,7 +41,7 @@ namespace Hangfire.JobExtensions
 
             services.AddHangfire(config => config
                                                  .UseLiteDbStorage(Configuration.GetConnectionString("HangfireConnection"))
-                                                 .UseRecurringJobAdmin(true, typeof(Startup).Assembly));
+                                                 .UseRecurringJobAdmin(typeof(Startup).Assembly));
             services.AddHangfireServer();
         }
 
