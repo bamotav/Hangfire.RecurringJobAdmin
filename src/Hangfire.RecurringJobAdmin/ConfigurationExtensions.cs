@@ -54,7 +54,7 @@ namespace Hangfire.RecurringJobAdmin
         }
 
         /// <param name="includeReferences">If is true it will load all dlls references of the current project to find all jobs.</param>
-        /// <param name="assemblies"></param>
+        /// <param name="assembliess"></param>
         [PublicAPI]
         public static IGlobalConfiguration UseRecurringJobAdmin(this IGlobalConfiguration config, bool includeReferences = false, [NotNull] params Assembly[] assemblies)
         {

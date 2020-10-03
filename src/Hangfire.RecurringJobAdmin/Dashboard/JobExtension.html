@@ -108,8 +108,8 @@
                             <th>State</th>
                             <th>Class</th>
                             <th>Method</th>
-                            <th>Last Execution</th>
                             <th>Next Execution</th>
+                            <th>Last Execution</th>
                             <th>Options</th>
                         </tr>
                     </thead>
@@ -118,7 +118,10 @@
                             <td>{{job.Id}}</td>
                             <td>{{job.Cron}}</td>
                             <td>{{job.Queue}}</td>
-                            <td>{{job.JobState}}</td>
+                            <td>
+                                <span v-if="job.JobState == 'Running'" class="label label-success">{{job.JobState}}</span>
+                                <span v-if="job.JobState == 'Stopped'" class="label label-danger">{{job.JobState}}</span>
+                            </td>
                             <td>{{job.Class}}</td>
                             <td>{{job.Method}}</td>
                             <td>{{job.LastExecution}}</td>

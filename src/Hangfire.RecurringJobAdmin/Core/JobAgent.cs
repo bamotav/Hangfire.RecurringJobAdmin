@@ -3,7 +3,9 @@ using Hangfire.RecurringJobAdmin.Models;
 using Hangfire.Storage;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using System.Net;
 using System.Text;
 
 namespace Hangfire.RecurringJobAdmin.Core
@@ -65,7 +67,9 @@ namespace Hangfire.RecurringJobAdmin.Core
 
                     if (dataJob.ContainsKey("NextExecution"))
                     {
-                        dto.NextExecution = JobHelper.DeserializeNullableDateTime(dataJob["NextExecution"]);
+                        var tempNextExecution = JobHelper.DeserializeNullableDateTime(dataJob["NextExecution"]);
+
+                        dto.NextExecution = tempNextExecution.HasValue ? tempNextExecution.Value.ToString("G") : "N/A";
                     }
 
                     if (dataJob.ContainsKey("LastJobId") && !string.IsNullOrWhiteSpace(dataJob["LastJobId"]))
@@ -86,7 +90,10 @@ namespace Hangfire.RecurringJobAdmin.Core
 
                     if (dataJob.ContainsKey("LastExecution"))
                     {
-                        dto.LastExecution = JobHelper.DeserializeNullableDateTime(dataJob["LastExecution"]);
+                        
+                        var tempLastExecution = JobHelper.DeserializeNullableDateTime(dataJob["LastExecution"]);
+
+                        dto.LastExecution = tempLastExecution.HasValue ? tempLastExecution.Value.ToString("G") : "N/A";
                     }
 
                     if (dataJob.ContainsKey("TimeZoneId"))
