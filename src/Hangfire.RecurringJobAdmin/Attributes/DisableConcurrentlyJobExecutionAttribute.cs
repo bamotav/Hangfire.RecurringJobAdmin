@@ -14,6 +14,9 @@ namespace Hangfire.RecurringJobAdmin
         public readonly int _from = 0;
         public readonly int _count = 2000;
         public readonly string _reason = "It is not allowed to perform multiple same tasks.";
+        public readonly Type _stateReason =  typeof(DeletedState);
+
+
 
         private string _methodName;
 
@@ -29,15 +32,36 @@ namespace Hangfire.RecurringJobAdmin
 
         }
 
+        public DisableConcurrentlyJobExecutionAttribute(string methodName, Type stateReason = null)
+        {
+            if (string.IsNullOrEmpty(methodName)) throw new ArgumentNullException(nameof(methodName));
+            if (stateReason != null && !typeof(IState).IsAssignableFrom(_stateReason)) throw new ArgumentException($"The type should implement the interface IState");
+
+            if (stateReason != null)
+            {
+                _stateReason = stateReason;
+            }
+
+            _methodName = methodName;
+
+        }
+
+
         /// <summary>
         /// 
         /// </summary>
         /// <param name="methodName"></param>
         /// <param name="from"></param>
         /// <param name="count"></param>
-        public DisableConcurrentlyJobExecutionAttribute(string methodName, int from = 0, int count = 2000)
+        public DisableConcurrentlyJobExecutionAttribute(string methodName, int from = 0, int count = 2000, Type stateReason = null)
         {
             if (string.IsNullOrEmpty(methodName)) throw new ArgumentNullException(nameof(methodName));
+            if (stateReason != null && !typeof(IState).IsAssignableFrom(_stateReason)) throw new ArgumentException($"The type should implement the interface IState");
+
+            if (stateReason != null)
+            {
+                _stateReason = stateReason;
+            }
 
             _from = from;
             _count = count;
@@ -51,9 +75,14 @@ namespace Hangfire.RecurringJobAdmin
         /// <param name="from"></param>
         /// <param name="count"></param>
         /// <param name="reason"></param>
-        public DisableConcurrentlyJobExecutionAttribute(string methodName, int from = 0, int count = 2000, string reason = "It is not allowed to perform multiple same tasks.")
+        public DisableConcurrentlyJobExecutionAttribute(string methodName, int from = 0, int count = 2000, string reason = "It is not allowed to perform multiple same tasks.", Type stateReason = null)
         {
             if (string.IsNullOrEmpty(methodName)) throw new ArgumentNullException(nameof(methodName));
+            if (stateReason != null && !typeof(IState).IsAssignableFrom(_stateReason)) throw new ArgumentException($"The type should implement the interface IState");
+            if (stateReason != null)
+            {
+                _stateReason = stateReason;
+            }
 
             _from = from;
             _count = count;
@@ -74,10 +103,29 @@ namespace Hangfire.RecurringJobAdmin
             {
                 if (processingJob.Value.Job.Method.Name.Equals(_methodName, StringComparison.InvariantCultureIgnoreCase) && !context.CandidateState.IsFinal)
                 {
-                    context.CandidateState = new DeletedState
+
+                    if (typeof(IState).IsAssignableFrom(_stateReason))
                     {
-                        Reason = _reason
-                    };
+
+                        if (_stateReason == typeof(DeletedState))
+                        {
+                            context.CandidateState = new DeletedState() {  Reason = _reason };
+                        }
+
+                        if (_stateReason == typeof(FailedState))
+                        {
+                           // context.CandidateState = new FailedState(context.Cand) { Reason = _reason };
+                        }
+
+                        if (_stateReason == typeof(DeletedState))
+                        {
+                            context.CandidateState = new DeletedState() { Reason = _reason };
+                        }
+
+
+                    }
+
+                    
 
                     return;
                 }
