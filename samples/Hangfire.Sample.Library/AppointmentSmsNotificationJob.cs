@@ -28,8 +28,7 @@ namespace Hangfire.Sample.Library
         [AutomaticRetry(Attempts = 0, OnAttemptsExceeded = AttemptsExceededAction.Fail)]
         public async Task DoThis()
         {
-            throw new Exception();
+            await Task.Run(() => throw new Exception());
         }
-
     }
 }
