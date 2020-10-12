@@ -104,7 +104,7 @@ namespace Hangfire.RecurringJobAdmin.Core
                     if (dataJob.ContainsKey("CreatedAt"))
                     {
                         dto.CreatedAt = JobHelper.DeserializeNullableDateTime(dataJob["CreatedAt"]);
-                        dto.CreatedAt = dto.CreatedAt.HasValue ? dto.CreatedAt.Value.ChangeTimeZone(dto.TimeZoneId) : default;
+                        dto.CreatedAt = dto.CreatedAt.HasValue ? dto.CreatedAt.Value.ChangeTimeZone(dto.TimeZoneId) : new DateTime();
                     }
 
                     if (dataJob.TryGetValue("Error", out var error) && !String.IsNullOrEmpty(error))
