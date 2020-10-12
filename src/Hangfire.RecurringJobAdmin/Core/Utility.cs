@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
 using System.Resources;
 using System.Security.Cryptography;
 using System.Text;
@@ -62,5 +64,13 @@ namespace Hangfire.RecurringJobAdmin.Core
         }
 
         public static string FormatKey(string serverId) => "utilization:" + serverId;
+
+        public static DateTime ChangeTimeZone(this DateTime dateTime, string timeZoneId) => TimeZoneInfo.ConvertTimeBySystemTimeZoneId(dateTime, timeZoneId);
+
+        public static IEnumerable<Tuple<string, string>> GetTimeZones()
+        {
+            ReadOnlyCollection<TimeZoneInfo> tz;
+            return TimeZoneInfo.GetSystemTimeZones().Select(o => new Tuple<string, string>(o.Id, o.DisplayName));
+        }
     }
 }
