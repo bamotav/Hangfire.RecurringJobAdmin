@@ -3,6 +3,9 @@
 <script type="text/javascript" src="JobConfiguration/js/axio"></script>
 <script type="text/javascript" src="JobConfiguration/js/sweetalert"></script>
 <script defer type="text/javascript" src="JobConfiguration/js/page"></script>
+<script type="text/javascript" src="JobConfiguration/js/daysjs"></script>
+<script type="text/javascript" src="JobConfiguration/js/relativeTime"></script>
+<script>dayjs.extend(dayjs_plugin_relativeTime);</script>
 
 <script type="text/x-template" id="modal-template">
     <transition name="modal">
@@ -263,8 +266,9 @@
                             <th>State</th>
                             <th>Class</th>
                             <th>Method</th>
-                            <th>Next Execution</th>
+                            <th>TimeZone</th>
                             <th>Last Execution</th>
+                            <th>Next Execution</th>
                             <th>Options</th>
                         </tr>
                     </thead>
@@ -279,8 +283,19 @@
                             </td>
                             <td>{{job.Class}}</td>
                             <td>{{job.Method}}</td>
-                            <td>{{job.LastExecution}}</td>
-                            <td>{{job.NextExecution}}</td>
+                            <td>{{job.TimeZoneId}}</td>
+                            <td>
+                                <button type="button" class="btn btn-primary">
+                                    {{getTime(job.LastExecution)}}&nbsp;&nbsp;
+                                    <span class="badge" style="width: 124px;">{{capitalizeString(dayjs().from(dayjs(job.LastExecution)))}}</span>
+                                </button>
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-primary">
+                                    {{getTime(job.NextExecution)}}&nbsp;&nbsp;
+                                    <span class="badge" style="width: 124px;">{{capitalizeString(dayjs().to(dayjs(job.NextExecution)))}}</span>
+                                </button>
+                            </td>
                             <td>
                                 <button type="button" class="btn btn-warning" @click="GetJob(job.Id)">Edit</button>
                                 <button type="button" v-if="job.JobState == 'Stopped'" class="btn btn-success" @click="StartJob(job.Id)">Start</button>
@@ -593,6 +608,12 @@
                 if (this.errors.length) return false;
 
                 //e.preventDefault();
+            },
+            capitalizeString(s) {
+                return s.charAt(0).toUpperCase() + s.slice(1);
+            },
+            getTime(date) {
+                return dayjs(date).format('hh:mm:ss A');
             }
         },
         created() {

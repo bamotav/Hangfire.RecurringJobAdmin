@@ -1,4 +1,16 @@
-﻿.modal-mask {
+﻿/** Main */
+#app {
+    position: relative !important;
+    left: -229px !important;
+}
+
+#app > div > div {
+    margin-top: 30px !important;
+    width: 1626px !important
+}
+
+/* Modal */
+.modal-mask {
     position: fixed;
     z-index: 9998;
     top: 0;
