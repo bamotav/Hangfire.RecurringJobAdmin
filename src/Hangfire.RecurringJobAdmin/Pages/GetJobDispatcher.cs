@@ -44,7 +44,7 @@ namespace Hangfire.RecurringJobAdmin.Pages
                     {
                         Id = x.Id,
                         Cron = x.Cron,
-                        CreatedAt = x.CreatedAt.HasValue ? x.CreatedAt.Value.ChangeTimeZone(x.TimeZoneId) : default,
+                        CreatedAt = x.CreatedAt.HasValue ? x.CreatedAt.Value.ChangeTimeZone(x.TimeZoneId) : new DateTime(),
                         Error = x.Error,
                         LastExecution = x.LastExecution.HasValue ? x.LastExecution.Value.ChangeTimeZone(x.TimeZoneId).ToString("G") : "N/A",
                         Method = x.Job.Method.Name,
