@@ -213,7 +213,9 @@
 
             <div class="form-group">
                 <label for="cron">Time Zone</label>
-                <input type="text" class="form-control" id="timezoneid" v-model="job.TimeZoneId" name="cron" placeholder="Enter the Time Zone">
+                <select id="timezoneid" class="form-control" v-model="job.TimeZoneId" name="cron" placeholder="Enter the Time Zone">
+                    <option v-for="(item, index) in timeZones" :key="index" :value="item.Item1">{{item.Item2}}</option>
+                </select>
             </div>
 
             <div class="form-group">
@@ -446,6 +448,7 @@
                 jobs: null,
                 showModal: false,
                 errors: [],
+                timeZones: [],
                 job: {
                     Id: '',
                     Cron: '',
@@ -570,6 +573,13 @@
                     });
                 }
             },
+            getTimeZones() {
+                axios.get('DataConfiguration/GetTimeZones').then(response => {
+                    this.timeZones = response.data;
+                }).catch(e => {
+                    console.log(e);
+                });
+            },
             closeModal() {
                 this.job = {
                     Id: '',
@@ -617,6 +627,7 @@
             }
         },
         created() {
+            this.getTimeZones();
             this.GetJobs();
         }
     });

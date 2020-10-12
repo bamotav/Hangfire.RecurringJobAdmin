@@ -44,16 +44,16 @@ namespace Hangfire.RecurringJobAdmin.Pages
                     {
                         Id = x.Id,
                         Cron = x.Cron,
-                        CreatedAt = x.CreatedAt,
+                        CreatedAt = x.CreatedAt.HasValue ? x.CreatedAt.Value.ChangeTimeZone(x.TimeZoneId) : default,
                         Error = x.Error,
-                        LastExecution = x.LastExecution.HasValue ? x.LastExecution.Value.ToString("G") : "N/A",//x.LastExecution,
+                        LastExecution = x.LastExecution.HasValue ? x.LastExecution.Value.ChangeTimeZone(x.TimeZoneId).ToString("G") : "N/A",
                         Method = x.Job.Method.Name,
                         JobState = "Running",
                         Class = x.Job.Type.Name,
                         Queue = x.Queue,
                         LastJobId = x.LastJobId,
                         LastJobState = x.LastJobState,
-                        NextExecution = x.NextExecution.HasValue ? x.NextExecution.Value.ToString("G") : "N/A",
+                        NextExecution = x.NextExecution.HasValue ? x.NextExecution.Value.ChangeTimeZone(x.TimeZoneId).ToString("G") : "N/A",
                         Removed = x.Removed,
                         TimeZoneId = x.TimeZoneId
                     });
