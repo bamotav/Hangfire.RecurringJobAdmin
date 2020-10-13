@@ -47,8 +47,9 @@ namespace Hangfire.RecurringJobAdmin.Core
                     var dto = new PeriodicJob();
 
                     var dataJob = connection.GetAllEntriesFromHash($"{tagRecurringJob}:{jobId}");
-
                     dto.Id = jobId;
+                    dto.TimeZoneId = "UTC"; // Default
+
                     try
                     {
                         if (dataJob.TryGetValue("Job", out var payload) && !String.IsNullOrWhiteSpace(payload))
@@ -64,12 +65,16 @@ namespace Hangfire.RecurringJobAdmin.Core
                         dto.Error = ex.Message;
                     }
 
+                    if (dataJob.ContainsKey("TimeZoneId"))
+                    {
+                        dto.TimeZoneId = dataJob["TimeZoneId"];
+                    }
 
                     if (dataJob.ContainsKey("NextExecution"))
                     {
                         var tempNextExecution = JobHelper.DeserializeNullableDateTime(dataJob["NextExecution"]);
 
-                        dto.NextExecution = tempNextExecution.HasValue ? tempNextExecution.Value.ToString("G") : "N/A";
+                        dto.NextExecution = tempNextExecution.HasValue ? tempNextExecution.Value.ChangeTimeZone(dto.TimeZoneId).ToString("G") : "N/A";
                     }
 
                     if (dataJob.ContainsKey("LastJobId") && !string.IsNullOrWhiteSpace(dataJob["LastJobId"]))
@@ -93,17 +98,13 @@ namespace Hangfire.RecurringJobAdmin.Core
                         
                         var tempLastExecution = JobHelper.DeserializeNullableDateTime(dataJob["LastExecution"]);
 
-                        dto.LastExecution = tempLastExecution.HasValue ? tempLastExecution.Value.ToString("G") : "N/A";
-                    }
-
-                    if (dataJob.ContainsKey("TimeZoneId"))
-                    {
-                        dto.TimeZoneId = dataJob["TimeZoneId"];
+                        dto.LastExecution = tempLastExecution.HasValue ? tempLastExecution.Value.ChangeTimeZone(dto.TimeZoneId).ToString("G") : "N/A";
                     }
 
                     if (dataJob.ContainsKey("CreatedAt"))
                     {
                         dto.CreatedAt = JobHelper.DeserializeNullableDateTime(dataJob["CreatedAt"]);
+                        dto.CreatedAt = dto.CreatedAt.HasValue ? dto.CreatedAt.Value.ChangeTimeZone(dto.TimeZoneId) : new DateTime();
                     }
 
                     if (dataJob.TryGetValue("Error", out var error) && !String.IsNullOrEmpty(error))
@@ -132,6 +133,5 @@ namespace Hangfire.RecurringJobAdmin.Core
             }
             return result;
         }
-
     }
 }
