@@ -96,6 +96,7 @@ namespace Hangfire.RecurringJobAdmin
             AddDashboardRouteToEmbeddedResource("/JobConfiguration/js/axio", "application/js", "Hangfire.RecurringJobAdmin.Dashboard.Content.js.axios.min.js");
             AddDashboardRouteToEmbeddedResource("/JobConfiguration/js/daysjs", "application/js", "Hangfire.RecurringJobAdmin.Dashboard.Content.js.daysjs.min.js");
             AddDashboardRouteToEmbeddedResource("/JobConfiguration/js/relativeTime", "application/js", "Hangfire.RecurringJobAdmin.Dashboard.Content.js.relativeTime.min.js");
+            AddDashboardRouteToEmbeddedResource("/JobConfiguration/js/vuejsPaginate", "application/js", "Hangfire.RecurringJobAdmin.Dashboard.Content.js.vuejs-paginate.js");
             AddDashboardRouteToEmbeddedResource("/JobConfiguration/js/sweetalert", "application/js", "Hangfire.RecurringJobAdmin.Dashboard.Content.js.sweetalert.js");
             AddDashboardRouteToEmbeddedResource("/JobConfiguration/css/jobExtension", "text/css", "Hangfire.RecurringJobAdmin.Dashboard.Content.css.JobExtension.css");
 

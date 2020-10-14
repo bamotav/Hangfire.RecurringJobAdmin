@@ -6,6 +6,7 @@
 <script type="text/javascript" src="JobConfiguration/js/daysjs"></script>
 <script type="text/javascript" src="JobConfiguration/js/relativeTime"></script>
 <script>dayjs.extend(dayjs_plugin_relativeTime);</script>
+<script type="text/javascript" src="JobConfiguration/js/vuejsPaginate"></script>
 
 <script type="text/x-template" id="modal-template">
     <transition name="modal">
@@ -255,7 +256,7 @@
 
     <div class="row">
         <div class="col-md-12" style="margin-top: 30px">
-            <h1 class="page-header">Recurring Jobs <span class="badge badge-warning">{{jobs.length}}</span></h1>
+            <h1 class="page-header">Recurring Jobs <span class="badge badge-warning">{{getItems.length}}</span></h1>
             <button type="button" class="btn btn-primary" style="margin-bottom: 20px;" @click="OpenModal">Add new Job</button>
             <div class="table-responsive">
                 <table class="table">
@@ -275,7 +276,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="job in jobs">
+                        <tr v-for="job in getItems">
                             <td>{{job.Id}}</td>
                             <td>{{job.Cron}}</td>
                             <td>{{job.Queue}}</td>
@@ -319,6 +320,19 @@
                         </tr>
                     </tbody>
                 </table>
+
+                <div style="float: right;">
+                    <paginate :page-count="getPageCount"
+                              :page-range="3"
+                              :margin-pages="2"
+                              :click-handler="clickCallbackPagination"
+                              :prev-text="'＜'"
+                              :next-text="'＞'"
+                              :container-class="'pagination'"
+                              :page-class="'page-item'">
+                    </paginate>
+                </div>
+
             </div>
         </div>
     </div>
@@ -455,6 +469,9 @@
 
     var appJob = new Vue({
         el: '#app',
+        components: {
+            'paginate': VuejsPaginate
+        },
         data() {
             return {
                 title: 'Add New Job',
@@ -470,6 +487,10 @@
                     Class: '',
                     Method: '',
                     JobState: ''
+                },
+                pagination: {
+                    parPage: 10,
+                    currentPage: 1
                 }
             }
         },
@@ -515,7 +536,6 @@
                             this.closeModal();
                         });
                     } else {
-
                         this.closeModal();
                         this.GetJobs();
                     }
@@ -637,11 +657,25 @@
             },
             getTime(date) {
                 return dayjs(date).format('hh:mm:ss A');
+            },
+            clickCallbackPagination(pageNum) {
+                this.pagination.currentPage = Number(pageNum);
             }
         },
         created() {
             this.getTimeZones();
             this.GetJobs();
+        },
+        computed: {
+            getItems: function () {
+                let current = this.pagination.currentPage * this.pagination.parPage;
+                let start = current - this.pagination.parPage;
+                if (this.jobs != null) return this.jobs.slice(start, current);
+                else return null;
+            },
+            getPageCount: function () {
+                return Math.ceil(this.jobs.length / this.pagination.parPage);
+            }
         }
     });
 </script>
