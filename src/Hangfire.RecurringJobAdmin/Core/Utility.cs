@@ -69,7 +69,6 @@ namespace Hangfire.RecurringJobAdmin.Core
 
         public static IEnumerable<Tuple<string, string>> GetTimeZones()
         {
-            ReadOnlyCollection<TimeZoneInfo> tz;
             return TimeZoneInfo.GetSystemTimeZones().Select(o => new Tuple<string, string>(o.Id, o.DisplayName));
         }
     }
