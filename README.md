@@ -66,6 +66,10 @@ public class RecurringJobTesting
    var StoppedJobs = JobAgent.GetAllJobStopped();
    
 ```
+* We have a new vue component to generate cron expression, made by [@JossyDevers](https://github.com/JossyDevers).
+
+![jobAgent](Content/generatecron.png)
+
 
 ## Instructions
 Install a package from Nuget. 
