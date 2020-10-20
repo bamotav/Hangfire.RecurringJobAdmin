@@ -13,7 +13,7 @@ namespace Hangfire.Sample.Library
             Console.WriteLine("Check File Exists");
         }
 
-        [RecurringJob("*/1 * * * *", "SA Western Standard Time", "default", RecurringJobId = "RunDelayJob")]
+        [RecurringJob("*/1 * * * *", "default", RecurringJobId = "RunDelayJob")]
         [DisableConcurrentlyJobExecution(nameof(RunDelayJob), jobState: JobState.EnqueuedState)]
         public async Task RunDelayJob()
         {
@@ -23,7 +23,7 @@ namespace Hangfire.Sample.Library
             await Task.Delay(180000, source.Token);
         }
 
-        [RecurringJob("*/1 * * * *", "SA Western Standard Time", "default", RecurringJobId = "DoThis")]
+        [RecurringJob("*/1 * * * *", "default", RecurringJobId = "DoThis")]
         [DisableConcurrentlyJobExecution(nameof(DoThis))]
         [AutomaticRetry(Attempts = 0, OnAttemptsExceeded = AttemptsExceededAction.Fail)]
         public async Task DoThis()
