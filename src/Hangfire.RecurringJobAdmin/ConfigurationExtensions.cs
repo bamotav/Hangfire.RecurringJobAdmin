@@ -77,13 +77,21 @@ namespace Hangfire.RecurringJobAdmin
         private static void CreateManagmentJob()
         {
             DashboardRoutes.Routes.AddRazorPage(JobExtensionPage.PageRoute, x => new JobExtensionPage());
+            DashboardRoutes.Routes.AddRazorPage(JobsStoppedPage.PageRoute, x => new JobsStoppedPage());
+
+            DashboardRoutes.Routes.Add("/jobs/GetJobsStopped", new GetJobsStoppedDispatcher());
             DashboardRoutes.Routes.Add("/JobConfiguration/GetJobs", new GetJobDispatcher());
             DashboardRoutes.Routes.Add("/JobConfiguration/UpdateJobs", new ChangeJobDispatcher());
             DashboardRoutes.Routes.Add("/JobConfiguration/GetJob", new GetJobForEdit());
             DashboardRoutes.Routes.Add("/JobConfiguration/JobAgent", new JobAgentDispatcher());
             DashboardRoutes.Routes.Add("/DataConfiguration/GetTimeZones", new GetTimeZonesDispatcher());
 
-
+            DashboardMetrics.AddMetric(TagDashboardMetrics.JobsStoppedCount);
+            JobsSidebarMenu.Items.Add(page => new MenuItem("Jobs Stopped", page.Url.To("/jobs/stopped"))
+            {
+                Active = page.RequestPath.StartsWith("/jobs/stopped"),
+                Metric = TagDashboardMetrics.JobsStoppedCount,
+            });
 
             NavigationMenu.Items.Add(page => new MenuItem(JobExtensionPage.Title, page.Url.To("/JobConfiguration"))
             {
