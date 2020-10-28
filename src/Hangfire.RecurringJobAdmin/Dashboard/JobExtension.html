@@ -1,4 +1,6 @@
 ﻿<link rel="stylesheet" type="text/css" href="JobConfiguration/css/jobExtension" />
+<link rel="stylesheet" type="text/css" href="JobConfiguration/css/cron-expression-input" />
+
 <script type="text/javascript" src="JobConfiguration/js/vue"></script>
 <script type="text/javascript" src="JobConfiguration/js/axio"></script>
 <script type="text/javascript" src="JobConfiguration/js/sweetalert"></script>
@@ -7,6 +9,7 @@
 <script type="text/javascript" src="JobConfiguration/js/relativeTime"></script>
 <script>dayjs.extend(dayjs_plugin_relativeTime);</script>
 <script type="text/javascript" src="JobConfiguration/js/vuejsPaginate"></script>
+<script type="text/javascript" src="JobConfiguration/js/cron-expression-input"></script>
 
 <script type="text/x-template" id="modal-template">
     <transition name="modal">
@@ -42,161 +45,6 @@
     </transition>
 </script>
 
-<script type="text/x-template" id="cron-fields">
-    <transition name="modal">
-        <div>
-            <form>
-                <div style="display: flex;">
-                    <div class="panel panel-default" style="margin-right: 5px; width: 50%;">
-                        <div class="panel-heading">
-                            <div style="display: flex;">
-                                <input class="form-check-input" type="radio" name="choise" :value="1" v-model="input.choise">
-                                <span style="margin-left: 10px;">Step</span>
-                            </div>
-                        </div>
-                        <div class="panel-body" style="display: flex !important;">
-                            <div class="form-group" style="margin-right: 5px; width: 50%;">
-                                <label for="everySelect">Every</label>
-                                <select v-model="input.every" class="form-control" style="width: 100%;" :disabled="input.choise == 1 ? false : true">
-                                    <option>*</option>
-                                    <option v-if="hasZero">0</option>
-                                    <option v-for="(item, index) in every" :key="index">{{item}}</option>
-                                </select>
-                            </div>
-                            <div class="form-group" style="margin-left: 5px; width: 50%;">
-                                <label for="stepSelect">Step</label>
-                                <select id="stepSelect" v-model="input.step" class="form-control" style="width: 100%;" :disabled="input.choise == 1 ? false : true">
-                                    <option>*</option>
-                                    <option v-if="hasZero">0</option>
-                                    <option v-for="(item, index) in step" :key="index">{{item}}</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="panel panel-default" style="margin-right: 5px; width: 50%;">
-                        <div class="panel-heading">
-                            <div style="display: flex;">
-                                <input class="form-check-input" type="radio" name="choise" :value="2" v-model="input.choise">
-                                <span style="margin-left: 10px;">Range</span>
-                            </div>
-                        </div>
-                        <div class="panel-body">
-                            <div class="form-group">
-                                <div style="display: flex;">
-                                    <div style="width: 50%; margin-right: 5px;">
-                                        <label class="form-check-label" for="exampleRadios1">Min</label>
-                                        <select id="stepSelect" v-model="input.rangeMin" class="form-control" style="width: 100%;"
-                                                :disabled="input.choise == 2 ? false : true">
-                                            <option v-if="hasZero">0</option>
-                                            <option v-for="(item, index) in rangeMin" :key="index">{{item}}</option>
-                                        </select>
-                                    </div>
-                                    <div style="width: 50%; margin-right: 5px;">
-                                        <label class="form-check-label" for="exampleRadios1">Max</label>
-                                        <select id="stepSelect" v-model="input.rangeMax" class="form-control" style="width: 100%;"
-                                                :disabled="input.choise == 2 ? false : true">
-                                            <option v-if="hasZero">0</option>
-                                            <option v-for="(item, index) in rangeMax" :key="index">{{item}}</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="panel panel-default" style="margin: 0px !important; padding: 0px !important;">
-                    <div class="panel-heading">
-                        <div style="display: flex;">
-                            <input class="form-check-input" type="radio" name="choise" :value="3" v-model="input.choise">
-                            <span style="margin-left: 10px;">Choise</span>
-                        </div>
-                    </div>
-                    <div class="panel-body">
-                        <div class="form-group" style="display: flex !important; flex-wrap: wrap !important; margin: 0px !important; padding: 0px !important;">
-                            <div v-if="hasZero" style="margin: 10px;">
-                                <label class="check-container">
-                                    0
-                                    <input type="checkbox" :value="0" v-model="input.spesific" :disabled="input.choise == 3 ? false : true">
-                                    <span class="checkmark"></span>
-                                </label>
-                            </div>
-                            <div v-for="(item, index) in spesific" :key="index" style="margin: 10px;">
-                                <label class="check-container">
-                                    {{ item }}
-                                    <input type="checkbox" :value="item" v-model="input.spesific" :disabled="input.choise == 3 ? false : true">
-                                    <span class="checkmark"></span>
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <small class="form-text text-muted" style="position: relative; top: 13px;">In case a value is incorrectly parameterized, [*] will be set by default</small>
-            </form>
-        </div>
-    </transition>
-</script>
-
-<script type="text/x-template" id="cron-input">
-    <div>
-        <div style="display: flex;" class="cronContainer">
-            <input type="text" class="form-control" placeholder="Enter Cron (Unix time)" v-model="cronmake">
-            <button type="button" class="btn btn-warning" @click="openCronUI">UI</button>
-        </div>
-        <transition v-if="showCronUI" name="modal" style="width: 200px !important;">
-            <div class="modal-mask">
-                <div class="modal-wrapper">
-                    <div class="modal-container" style="width: 823px !important;">
-                        <div class="modal-body">
-                            <ul class="nav nav-tabs" id="myTab" role="tablist">
-                                <li class="nav-item">
-                                    <a class="nav-link active" id="minuteItem" href="#minuteTab" data-toggle="tab" role="tab" aria-controls="home" aria-selected="true" style="color: black;">Minutes</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" id="hoursItem" href="#hoursTab" data-toggle="tab" role="tab" aria-controls="profile" aria-selected="false" style="color: black;">Hours</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" id="dayItem" href="#dayTab" data-toggle="tab" role="tab" aria-controls="contact" aria-selected="false" style="color: black;">Day of Month</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" id="monthItem" href="#monthTab" data-toggle="tab" role="tab" aria-controls="contact" aria-selected="false" style="color: black;">Month</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" id="dayOfWeekItem" href="#dayOfWeekTab" data-toggle="tab" role="tab" aria-controls="contact" aria-selected="false" style="color: black;">Days of week</a>
-                                </li>
-                            </ul>
-                            <div class="tab-content" id="myTabContent" style="margin-top: 35px;">
-                                <div class="tab-pane fade active in" id="minuteTab" role="tabpanel" aria-labelledby="minuteTab">
-                                    <cron-fields :input="cron.minute.input" :hasZero="true" :every="59" :step="59" :rangeMin="59" :rangeMax="59" :spesific="59" />
-                                </div>
-                                <div class="tab-pane fade" id="hoursTab" role="tabpanel" aria-labelledby="hoursTab">
-                                    <cron-fields :input="cron.hour.input" :hasZero="true" :every="23" :step="23" :rangeMin="23" :rangeMax="23" :spesific="23" />
-                                </div>
-                                <div class="tab-pane fade" id="dayTab" role="tabpanel" aria-labelledby="dayTab">
-                                    <cron-fields :input="cron.dayOfMonth.input" :every="31" :step="31" :rangeMin="31" :rangeMax="31" :spesific="31" />
-                                </div>
-                                <div class="tab-pane fade" id="monthTab" role="tabpanel" aria-labelledby="monthTab">
-                                    <cron-fields :input="cron.month.input" :every="12" :step="12" :rangeMin="12" :rangeMax="12" :spesific="12" />
-                                </div>
-                                <div class="tab-pane fade" id="dayOfWeekTab" role="tabpanel" aria-labelledby="dayOfWeekTab">
-                                    <cron-fields :input="cron.dayOfWeek.input" :hasZero="true" :every="6" :step="6" :rangeMin="6" :rangeMax="6" :spesific="6" />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="modal-default-button btn btn-danger pull-left" @click="closeCronUI">
-                                Close
-                            </button>
-                            <button type="button" class="modal-default-button btn btn-success" @click="generateCron">
-                                Generate
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </transition>
-    </div>
-</script>
-
 <div id="app">
 
     <modal v-if="showModal" @close="closeModal">
@@ -209,7 +57,7 @@
             </div>
             <div class="form-group">
                 <label for="cron">Cron</label>
-                <cron-input v-bind:cronmake="job.Cron" v-on:update:cronmake="job.Cron = $event" />
+                <cron-expression-input :value="job.Cron" v-on:input="job.Cron = $event.detail.value" color="d58512" />
             </div>
 
             <div class="form-group">
@@ -340,124 +188,6 @@
 </div>
 
 <script>
-
-    // Cron-Input Component (START)
-    function cronInputInitialData() {
-        return {
-            showCronUI: false,
-            cron: {
-                minute: {
-                    input: {
-                        every: '*',
-                        step: '*',
-                        rangeMin: '0',
-                        rangeMax: '0',
-                        spesific: [],
-                        choise: 1
-                    }
-                },
-                hour: {
-                    input: {
-                        every: '*',
-                        step: '*',
-                        rangeMin: '0',
-                        rangeMax: '0',
-                        spesific: [],
-                        choise: 1
-                    }
-                },
-                dayOfMonth: {
-                    input: {
-                        every: '*',
-                        step: '*',
-                        rangeMin: '1',
-                        rangeMax: '1',
-                        spesific: [],
-                        choise: 1
-                    }
-                },
-                month: {
-                    input: {
-                        every: '*',
-                        step: '*',
-                        rangeMin: '1',
-                        rangeMax: '1',
-                        spesific: [],
-                        choise: 1
-                    }
-                },
-                dayOfWeek: {
-                    input: {
-                        every: '*',
-                        step: '*',
-                        rangeMin: '0',
-                        rangeMax: '0',
-                        spesific: [],
-                        choise: 1
-                    }
-                }
-            }
-        }
-    }
-
-    Vue.component('cron-fields', {
-        template: '#cron-fields',
-        props: ['input', 'hasZero', 'every', 'step', 'rangeMin', 'rangeMax', 'spesific']
-    });
-
-    Vue.component('cron-input', {
-        template: '#cron-input',
-        props: ['cronmake'],
-        data() {
-            return cronInputInitialData();
-        },
-        watch: {
-            cronmake(val) {
-                this.updatecronmake(val);
-            }
-        },
-        methods: {
-            openCronUI() {
-                this.showCronUI = true;
-            },
-            closeCronUI() {
-                Object.assign(this.$data, cronInputInitialData());
-            },
-            makeCron(input) {
-                cron = '*';
-                if (input.choise == 1) {
-                    if (input.step == '*') { cron = `${input.every}`; }
-                    else { cron = `${input.every}/${input.step}`; }
-                }
-                else if (input.choise == 2 && !(input.rangeMin == '*' || input.rangeMax == '*')) {
-                    let min = parseInt(input.rangeMin);
-                    let max = parseInt(input.rangeMax);
-                    if (!(min >= max)) {
-                        cron = `${input.rangeMin}-${input.rangeMax}`;
-                    }
-                }
-                else if (input.choise == 3 && input.spesific.length != 0) {
-                    cron = '';
-                    input.spesific.forEach(m => {
-                        cron += m + ',';
-                    });
-                    cron = cron.slice(0, cron.length - 1);
-                }
-                return cron;
-            },
-            updatecronmake(value) {
-                this.$emit('update:cronmake', value);
-            },
-            generateCron() {
-                this.cronmake = `${this.makeCron(this.cron.minute.input)} ${this.makeCron(this.cron.hour.input)} ${this.makeCron(this.cron.dayOfMonth.input)} ` +
-                    `${this.makeCron(this.cron.month.input)} ${this.makeCron(this.cron.dayOfWeek.input)}`;
-                this.updatecronmake(this.cronmake);
-                this.closeCronUI();
-            }
-        }
-    });
-    // Cron-Input Component (END)
-
     Vue.component('modal', {
         template: '#modal-template',
         methods: {
