@@ -12,8 +12,8 @@ namespace Hangfire.RecurringJobAdmin.Core
 {
     public static class JobAgent
     {
-        private const string tagRecurringJob = "recurring-job";
-        private const string tagStopJob = "recurring-jobs-stop";
+        public const string tagRecurringJob = "recurring-job";
+        public const string tagStopJob = "recurring-jobs-stop";
         public static void StartBackgroundJob(string JobId)
         {
             using (var connection = JobStorage.Current.GetConnection())
@@ -122,16 +122,18 @@ namespace Hangfire.RecurringJobAdmin.Core
             return outPut;
         }
 
-        public static bool IsValidJobId(string jobId)
+        public static bool IsValidJobId(string jobId, string tag = tagRecurringJob)
         {
             var result = false;
             using (var connection = JobStorage.Current.GetConnection())
             {
-                var job = connection.GetAllEntriesFromHash($"{tagRecurringJob}:{jobId}");
+                var job = connection.GetAllEntriesFromHash($"{tag}:{jobId}");
 
                 result = job != null;
             }
             return result;
         }
+
+      
     }
 }
