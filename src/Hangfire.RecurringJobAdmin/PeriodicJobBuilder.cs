@@ -10,6 +10,8 @@ namespace Hangfire.RecurringJobAdmin
     {
         internal static void GetAllJobs()
         {
+            var _registry = new RecurringJobRegistry();
+
             foreach (var assembly in StorageAssemblySingleton.GetInstance().currentAssembly)
             {
                 foreach (var type in assembly.GetTypes())
@@ -27,14 +29,17 @@ namespace Hangfire.RecurringJobAdmin
                             var attr = method.GetCustomAttribute<RecurringJobAttribute>();
                         }
 
-                        var _registry = new RecurringJobRegistry();
+                        if(!JobAgent.IsValidJobId(attribute.RecurringJobId) && !JobAgent.IsValidJobId(attribute.RecurringJobId, JobAgent.tagStopJob))
+                        {
+                            _registry.Register(
+                                    attribute.RecurringJobId,
+                                    method,
+                                    attribute.Cron,
+                                    string.IsNullOrEmpty(attribute.TimeZone) ? TimeZoneInfo.Utc : TimeZoneInfo.FindSystemTimeZoneById(attribute.TimeZone),
+                                    attribute.Queue ?? EnqueuedState.DefaultQueue);
+                        }
 
-                        _registry.Register(
-                                  attribute.RecurringJobId,
-                                  method,
-                                  attribute.Cron,
-                                  string.IsNullOrEmpty(attribute.TimeZone) ? TimeZoneInfo.Utc : TimeZoneInfo.FindSystemTimeZoneById(attribute.TimeZone),
-                                  attribute.Queue ?? EnqueuedState.DefaultQueue);
+                       
                     }
                 }
             }
