@@ -85,9 +85,9 @@
 
 
   <ItemGroup>
-    <PackageReference Include="Cronos" Version="0.7.0" />
-    <PackageReference Include="HangFire.Core" Version="1.7.6" />
-    <PackageReference Include="Newtonsoft.Json" Version="11.0.1" />
+    <PackageReference Include="Cronos" Version="0.7.1" />
+    <PackageReference Include="HangFire.Core" Version="1.7.24" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
   </ItemGroup>
 
 </Project>
