@@ -21,7 +21,7 @@ namespace Hangfire.RecurringJobAdmin.Core
         /// <param name="cron">Cron expressions</param>
         /// <param name="timeZone"><see cref="TimeZoneInfo"/></param>
         /// <param name="queue">Queue name</param>
-        public void Register(string recurringJobId, MethodInfo method, string cron, TimeZoneInfo timeZone, string queue)
+        public void Register(string recurringJobId, MethodInfo method, string cron, TimeZoneInfo timeZone, string queue, List<object> arguments)
         {
             if (recurringJobId == null) throw new ArgumentNullException(nameof(recurringJobId));
             if (method == null) throw new ArgumentNullException(nameof(method));
@@ -35,7 +35,14 @@ namespace Hangfire.RecurringJobAdmin.Core
 
             for (int i = 0; i < parameters.Length; i++)
             {
-                args[i] = Expression.Default(parameters[i].ParameterType);
+                if (arguments?.Count >= i)
+                {
+                    args[i] = Expression.Constant(arguments[i], parameters[i].ParameterType);
+                }
+                else
+                {
+                    args[i] = Expression.Default(parameters[i].ParameterType);
+                }
             }
 
             var x = Expression.Parameter(method.DeclaringType, "x");

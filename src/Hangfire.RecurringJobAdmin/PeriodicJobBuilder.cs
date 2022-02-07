@@ -36,7 +36,8 @@ namespace Hangfire.RecurringJobAdmin
                                     method,
                                     attribute.Cron,
                                     string.IsNullOrEmpty(attribute.TimeZone) ? TimeZoneInfo.Utc : TimeZoneInfo.FindSystemTimeZoneById(attribute.TimeZone),
-                                    attribute.Queue ?? EnqueuedState.DefaultQueue);
+                                    attribute.Queue ?? EnqueuedState.DefaultQueue,
+                                    attribute.Arguments);
                         }
 
                        

@@ -64,7 +64,8 @@ namespace Hangfire.RecurringJobAdmin.Pages
                 LastJobState = recurringJob.LastJobState,
 //                NextExecution = recurringJob.NextExecution,
                 Removed = recurringJob.Removed,
-                TimeZoneId = recurringJob.TimeZoneId
+                TimeZoneId = recurringJob.TimeZoneId,
+                Arguments = recurringJob.Job.Args.ToList()
             };
 
             response.Object = periodicJob;

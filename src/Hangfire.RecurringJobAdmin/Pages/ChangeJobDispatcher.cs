@@ -39,6 +39,18 @@ namespace Hangfire.RecurringJobAdmin.Pages
             job.Method = context.Request.GetQuery("Method");
             job.Queue = context.Request.GetQuery("Queue");
             job.TimeZoneId = context.Request.GetQuery("TimeZoneId");
+            job.Arguments = new List<object>();
+
+            for (int i = 0;; i++)
+            {
+                var query = context.Request.GetQuery("Argument[" + i + "]");
+                if (query != null)
+                {
+                    job.Arguments.Add(query);
+                    continue; // We got a value, so continue
+                }
+                break;
+            }
 
             var timeZone = TimeZoneInfo.Utc;
 
@@ -102,7 +114,8 @@ namespace Hangfire.RecurringJobAdmin.Pages
                       methodInfo,
                       job.Cron,
                       timeZone,
-                      job.Queue ?? EnqueuedState.DefaultQueue);
+                      job.Queue ?? EnqueuedState.DefaultQueue,
+                      job.Arguments);
 
 
             context.Response.StatusCode = (int)HttpStatusCode.OK;
