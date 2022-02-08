@@ -3,30 +3,29 @@ using Hangfire.Dashboard;
 using Hangfire.RecurringJobAdmin.Core;
 using Hangfire.RecurringJobAdmin.Models;
 using Hangfire.States;
-using Hangfire.Storage;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Net;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Hangfire.RecurringJobAdmin.Pages
 {
     internal sealed class ChangeJobDispatcher : IDashboardDispatcher
     {
-        private readonly IStorageConnection _connection;
         private readonly RecurringJobRegistry _recurringJobRegistry;
 
         public ChangeJobDispatcher()
         {
 
-            _connection = JobStorage.Current.GetConnection();
             _recurringJobRegistry = new RecurringJobRegistry();
         }
 
+        public class ArgumentsInput
+        {
+            public string value { get; set; }
+        }
 
         public async Task Dispatch([NotNull] DashboardContext context)
         {
@@ -41,15 +40,10 @@ namespace Hangfire.RecurringJobAdmin.Pages
             job.TimeZoneId = context.Request.GetQuery("TimeZoneId");
             job.Arguments = new List<object>();
 
-            for (int i = 0;; i++)
+            var args = JsonConvert.DeserializeObject<ArgumentsInput[]>("[" + context.Request.GetQuery("Arguments[]") + "]");
+            foreach (ArgumentsInput arg in args)
             {
-                var query = context.Request.GetQuery("Argument[" + i + "]");
-                if (query != null)
-                {
-                    job.Arguments.Add(query);
-                    continue; // We got a value, so continue
-                }
-                break;
+                job.Arguments.Add(arg.value);
             }
 
             var timeZone = TimeZoneInfo.Utc;
@@ -80,7 +74,7 @@ namespace Hangfire.RecurringJobAdmin.Pages
 
                 return;
             }
-          
+
 
             if (!StorageAssemblySingleton.GetInstance().IsValidType(job.Class))
             {
@@ -92,7 +86,7 @@ namespace Hangfire.RecurringJobAdmin.Pages
                 return;
             }
 
-            if (!StorageAssemblySingleton.GetInstance().IsValidMethod(job.Class, job.Method))
+            if (!StorageAssemblySingleton.GetInstance().IsValidMethod(job.Class, job.Method, job.Arguments.Count))
             {
                 response.Status = false;
                 response.Message = "The Method not found";
@@ -103,11 +97,11 @@ namespace Hangfire.RecurringJobAdmin.Pages
             }
 
 
-            var methodInfo = StorageAssemblySingleton.GetInstance().currentAssembly
-                                                                                .Where(x => x?.GetType(job.Class)?.GetMethod(job.Method) != null)
-                                                                                .FirstOrDefault()
-                                                                                .GetType(job.Class)
-                                                                                .GetMethod(job.Method);
+            var methodInfo = StorageAssemblySingleton.GetInstance()
+                                                     .currentAssembly
+                                                     .FirstOrDefault(x => x?.GetType(job.Class)?.GetMethods().Any(m => m.Name == job.Method) == true)
+                                                     ?.GetType(job.Class)
+                                                     .GetMethods().FirstOrDefault(m => m.Name == job.Method && m.GetParameters().Length == job.Arguments.Count);
 
             _recurringJobRegistry.Register(
                       job.Id,
