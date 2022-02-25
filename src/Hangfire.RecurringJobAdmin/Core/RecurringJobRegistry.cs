@@ -12,7 +12,7 @@ namespace Hangfire.RecurringJobAdmin.Core
 	/// </summary>
 	public class RecurringJobRegistry : IRecurringJobRegistry
     {
-       
+
         /// <summary>
         /// Register RecurringJob via <see cref="MethodInfo"/>.
         /// </summary>
@@ -37,7 +37,26 @@ namespace Hangfire.RecurringJobAdmin.Core
             {
                 if (arguments?.Count >= i)
                 {
-                    args[i] = Expression.Constant(arguments[i], parameters[i].ParameterType);
+                    if (parameters[i].ParameterType != typeof(string) && arguments[i]?.GetType() == typeof(string))
+                    {
+                        if (string.IsNullOrWhiteSpace((string)arguments[i]))
+                        {
+                            if (parameters[i].ParameterType.IsValueType)
+                            {
+                                arguments[i] = Activator.CreateInstance(parameters[i].ParameterType);
+                            }
+                            arguments[i] = null;
+                        }
+                    }
+
+                    if (Nullable.GetUnderlyingType(parameters[i].ParameterType) != null && arguments[i] == null)
+                    {
+                        args[i] = Expression.Constant(null, parameters[i].ParameterType);
+                    }
+                    else
+                    {
+                        args[i] = Expression.Constant(Convert.ChangeType(arguments[i], parameters[i].ParameterType), parameters[i].ParameterType);
+                    }
                 }
                 else
                 {
