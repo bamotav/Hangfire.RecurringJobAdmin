@@ -35,6 +35,7 @@ namespace Hangfire.RecurringJobAdmin.Pages
             var periodicJob = new List<PeriodicJob>();
             
 
+            CultureInfo US_TimeFormat = new CultureInfo("en-US");
 
             if (recurringJob.Count >  0)
             {
@@ -46,20 +47,19 @@ namespace Hangfire.RecurringJobAdmin.Pages
                         Cron = x.Cron,
                         CreatedAt = x.CreatedAt.HasValue ? x.CreatedAt.Value.ChangeTimeZone(x.TimeZoneId) : new DateTime(),
                         Error = x.Error,
-                        LastExecution = x.LastExecution.HasValue ? x.LastExecution.Value.ChangeTimeZone(x.TimeZoneId).ToString("G") : "N/A",
-                        Method = x.Job.Method.Name,
+                        LastExecution = x.LastExecution.HasValue ? x.LastExecution.Value.ChangeTimeZone(x.TimeZoneId).ToString("G", US_TimeFormat) : "N/A",
+                        Method = x.Job?.Method.Name,
                         JobState = "Running",
-                        Class = x.Job.Type.Name,
+                        Class = x.Job?.Type.Name,
                         Queue = x.Queue,
                         LastJobId = x.LastJobId,
                         LastJobState = x.LastJobState,
-                        NextExecution = x.NextExecution.HasValue ? x.NextExecution.Value.ChangeTimeZone(x.TimeZoneId).ToString("G") : "N/A",
+                        NextExecution = x.NextExecution.HasValue ? x.NextExecution.Value.ChangeTimeZone(x.TimeZoneId).ToString("G", US_TimeFormat) : "N/A",
                         Removed = x.Removed,
                         TimeZoneId = x.TimeZoneId
                     });
                 });
             }
-
             //Add job was stopped:
             periodicJob.AddRange(JobAgent.GetAllJobStopped());
 
