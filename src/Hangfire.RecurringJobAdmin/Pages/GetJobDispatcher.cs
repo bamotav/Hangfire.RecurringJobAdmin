@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Net;
 using System.Text;
@@ -55,7 +56,8 @@ namespace Hangfire.RecurringJobAdmin.Pages
                         LastJobState = x.LastJobState,
                         NextExecution = x.NextExecution.HasValue ? x.NextExecution.Value.ChangeTimeZone(x.TimeZoneId).ToString("G") : "N/A",
                         Removed = x.Removed,
-                        TimeZoneId = x.TimeZoneId
+                        TimeZoneId = x.TimeZoneId,
+                        Arguments = x.Job.Args.ToList()
                     });
                 });
             }

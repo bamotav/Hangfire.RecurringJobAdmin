@@ -12,7 +12,7 @@ namespace Hangfire.RecurringJobAdmin.Core
 	/// </summary>
 	public class RecurringJobRegistry : IRecurringJobRegistry
     {
-       
+
         /// <summary>
         /// Register RecurringJob via <see cref="MethodInfo"/>.
         /// </summary>
@@ -21,7 +21,7 @@ namespace Hangfire.RecurringJobAdmin.Core
         /// <param name="cron">Cron expressions</param>
         /// <param name="timeZone"><see cref="TimeZoneInfo"/></param>
         /// <param name="queue">Queue name</param>
-        public void Register(string recurringJobId, MethodInfo method, string cron, TimeZoneInfo timeZone, string queue)
+        public void Register(string recurringJobId, MethodInfo method, string cron, TimeZoneInfo timeZone, string queue, List<object> arguments)
         {
             if (recurringJobId == null) throw new ArgumentNullException(nameof(recurringJobId));
             if (method == null) throw new ArgumentNullException(nameof(method));
@@ -35,7 +35,33 @@ namespace Hangfire.RecurringJobAdmin.Core
 
             for (int i = 0; i < parameters.Length; i++)
             {
-                args[i] = Expression.Default(parameters[i].ParameterType);
+                if (arguments?.Count >= i)
+                {
+                    if (parameters[i].ParameterType != typeof(string) && arguments[i]?.GetType() == typeof(string))
+                    {
+                        if (string.IsNullOrWhiteSpace((string)arguments[i]))
+                        {
+                            if (parameters[i].ParameterType.IsValueType)
+                            {
+                                arguments[i] = Activator.CreateInstance(parameters[i].ParameterType);
+                            }
+                            arguments[i] = null;
+                        }
+                    }
+
+                    if (Nullable.GetUnderlyingType(parameters[i].ParameterType) != null && arguments[i] == null)
+                    {
+                        args[i] = Expression.Constant(null, parameters[i].ParameterType);
+                    }
+                    else
+                    {
+                        args[i] = Expression.Constant(Convert.ChangeType(arguments[i], parameters[i].ParameterType), parameters[i].ParameterType);
+                    }
+                }
+                else
+                {
+                    args[i] = Expression.Default(parameters[i].ParameterType);
+                }
             }
 
             var x = Expression.Parameter(method.DeclaringType, "x");

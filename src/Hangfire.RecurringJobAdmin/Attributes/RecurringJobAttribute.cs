@@ -34,6 +34,9 @@ namespace Hangfire.RecurringJobAdmin
         /// If false it will be deleted automatically.
         /// </summary>
         public bool Enabled { get; set; } = true;
+
+        public List<object> Arguments { get; set; }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="RecurringJobAttribute"/>
         /// </summary>

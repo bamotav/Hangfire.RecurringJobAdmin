@@ -1,5 +1,4 @@
-﻿using Hangfire.Annotations;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -14,10 +13,10 @@ namespace Hangfire.RecurringJobAdmin.Core
         }
 
         private static StorageAssemblySingleton _instance;
-        private string[] prefixIgnore = new[] { "Hangfire.RecurringJobAdmin.dll", "Microsoft." };
+        private string[] prefixIgnore = { "Hangfire.RecurringJobAdmin.dll", "Microsoft." };
 
 
-        public List<Assembly> currentAssembly { get; private set; } = new List<Assembly>();
+        public List<Assembly> currentAssembly { get; } = new List<Assembly>();
 
         internal static StorageAssemblySingleton GetInstance()
         {
@@ -46,9 +45,12 @@ namespace Hangfire.RecurringJobAdmin.Core
 
         public bool IsValidType(string type) => currentAssembly.Any(x => x.GetType(type) != null);
 
-        public bool IsValidMethod(string type, string method) => currentAssembly?
-                                                                    .FirstOrDefault(x => x.GetType(type) != null)?.GetType(type)?.GetMethod(method) != null;
-
-
+        public bool IsValidMethod(string type, string method, int args)
+        {
+            return currentAssembly?.FirstOrDefault(x => x.GetType(type) != null)
+                                  ?.GetType(type)
+                                  ?.GetMethods()
+                                  .Any(m => m.Name == method && m.GetParameters().Length == args) != null;
+        }
     }
 }

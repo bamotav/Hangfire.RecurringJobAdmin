@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
+using Hangfire.States;
 
 namespace Hangfire.RecurringJobAdmin.Models
 {
@@ -12,6 +13,12 @@ namespace Hangfire.RecurringJobAdmin.Models
     /// </summary>
     public class PeriodicJob
     {
+        public PeriodicJob()
+        {
+            Queue = EnqueuedState.DefaultQueue;
+            TimeZoneId = TimeZoneInfo.Local.Id;
+        }
+
         public string Id { get; set; }
         public string Cron { get; set; }
         public string Queue { get; set; }
@@ -19,6 +26,8 @@ namespace Hangfire.RecurringJobAdmin.Models
         public string Class { get; set; }
 
         public string Method { get; set; }
+        
+        public List<object> Arguments { get; set; }
 
         public string JobState { get; set; }
 
