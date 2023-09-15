@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using System.Text;
+using System.Threading.Tasks;
 
 namespace Hangfire.RecurringJobAdmin.Core
 {
@@ -12,7 +12,36 @@ namespace Hangfire.RecurringJobAdmin.Core
 	/// </summary>
 	public class RecurringJobRegistry : IRecurringJobRegistry
     {
-       
+        static readonly MethodInfo
+            addOrUpdateGenericMethod =
+                typeof(RecurringJob)
+                    .GetMethods(BindingFlags.Public | BindingFlags.Static)
+                    .Single(
+                        m => m.Name == nameof(RecurringJob.AddOrUpdate) &&
+                             m.GetGenericArguments().Length == 1 &&
+                             m.GetParameters()
+                                 .Select(i => i.ParameterType)
+                                 .SequenceEqual(
+                                     new[]
+                                     {
+                                         typeof(string),
+                                         typeof(string),
+                                         typeof(Expression<>)
+                                             .MakeGenericType(
+                                                 typeof(Func<,>)
+                                                     .MakeGenericType(m.GetGenericArguments()[0], typeof(Task))),
+                                         typeof(string),
+                                         typeof(RecurringJobOptions)
+                                     }));
+
+        static readonly MethodInfo expressionLambdaGenericMethod =
+            typeof(Expression).GetMethods(BindingFlags.Public | BindingFlags.Static)
+                .Single(
+                    m => m.Name == nameof(Expression.Lambda) &&
+                         m.GetGenericArguments().Length == 1 &&
+                         m.GetParameters().Select(p => p.ParameterType)
+                             .SequenceEqual(new[] { typeof(Expression), typeof(ParameterExpression[]) }));
+
         /// <summary>
         /// Register RecurringJob via <see cref="MethodInfo"/>.
         /// </summary>
@@ -42,20 +71,42 @@ namespace Hangfire.RecurringJobAdmin.Core
 
             var methodCall = method.IsStatic ? Expression.Call(method, args) : Expression.Call(x, method, args);
 
-            var addOrUpdate = Expression.Call(
-                typeof(RecurringJob),
-                nameof(RecurringJob.AddOrUpdate),
-                new Type[] { method.DeclaringType },
-                new Expression[]
-                {
-                    Expression.Constant(recurringJobId),
-                    Expression.Lambda(methodCall, x),
-                    Expression.Constant(cron),
-                    Expression.Constant(timeZone),
-                    Expression.Constant(queue)
-                });
-
-            Expression.Lambda(addOrUpdate).Compile().DynamicInvoke();
+            var returnType = method.ReturnType;
+            var isCallResultGenericTask =
+                returnType.IsGenericType && returnType.GetGenericTypeDefinition() == typeof(Task<>);
+            if (isCallResultGenericTask)
+            {
+                // Dynamic compilation cannot find RecurringJob.AddOrUpdate<T>(..., Expression<Func<T, Task>>, ...) when
+                // the methodCall argument has type Expression<Func<T, Task<TResult>>>, so we construct and invoke
+                // the call manually:
+                var jobOptions = new RecurringJobOptions { TimeZone = timeZone };
+                var declaringType = method.DeclaringType;
+                var expressionLambdaMethodReturningNonGenericTask =
+                    expressionLambdaGenericMethod.MakeGenericMethod(
+                        typeof(Func<,>).MakeGenericType(declaringType, typeof(Task)));
+                var lambdaExpression =
+                    expressionLambdaMethodReturningNonGenericTask.Invoke(
+                        null, new object[] { methodCall, new [] { x } });
+                var addOrUpdateMethod = addOrUpdateGenericMethod.MakeGenericMethod(declaringType);
+                addOrUpdateMethod.Invoke(null, new [] { recurringJobId, queue, lambdaExpression, cron, jobOptions });
+            }
+            else
+            {
+                var addOrUpdate = Expression.Call(
+                    typeof(RecurringJob),
+                    nameof(RecurringJob.AddOrUpdate),
+                    new Type[] { method.DeclaringType },
+                    new Expression[]
+                    {
+                        Expression.Constant(recurringJobId),
+                        Expression.Lambda(methodCall, x),
+                        Expression.Constant(cron),
+                        Expression.Constant(timeZone),
+                        Expression.Constant(queue)
+                    });
+                
+                Expression.Lambda(addOrUpdate).Compile().DynamicInvoke();
+            }
         }
 
         ///// <summary>
