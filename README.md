@@ -4,6 +4,7 @@
 [![Build Status](https://github.com/bamotav/Hangfire.RecurringJobAdmin/workflows/CI-HRJ/badge.svg)](https://github.com/bamotav/Hangfire.RecurringJobAdmin/actions)
 [![Official Site](https://img.shields.io/badge/site-hangfire.io-blue.svg)](http://hangfire.io)
 [![License MIT](https://img.shields.io/badge/license-MIT-green.svg)](http://opensource.org/licenses/MIT)
+[![BuiltWithDot.Net shield](https://builtwithdot.net/project/483/hangfire-recurringjobadmin-dashboard/badge)](https://builtwithdot.net/project/483/hangfire-recurringjobadmin-dashboard)
 
 
 
